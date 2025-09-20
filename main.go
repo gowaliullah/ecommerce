@@ -19,6 +19,35 @@ var productList []Product
 func getProducts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "Plz give me GET method", http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(productList)
+}
+
+func createProduct(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Plz give me POST method", http.StatusBadRequest)
+		return
+	}
+
+	var newProduct Product
+	err := json.NewDecoder(r.Body).Decode(&newProduct)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "Plz give me valid JSON", http.StatusBadRequest)
+		return
+	}
+
+	newProduct.ID = len(productList) + 1
+	productList = append(productList, newProduct)
+
 	json.NewEncoder(w).Encode(productList)
 }
 
