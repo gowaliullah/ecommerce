@@ -10,8 +10,10 @@ type Product struct {
 	Title       string  `json:"title"`
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
-	ImgUrl      string  `json:"img_url"`
+	ImgUrl      string  `json:"imageUrl"`
 }
+
+var productList []Product
 
 func welcome(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Welcome to my ecommerce......!")
@@ -30,7 +32,7 @@ func main() {
 }
 
 func init() {
-	products := []Product{}
+
 	prd1 := Product{
 		ID:          1,
 		Title:       "Wireless Noise-Canceling Headphones",
@@ -66,5 +68,5 @@ func init() {
 		Price:       89.99,
 		ImgUrl:      "https://example.com/images/coffeemaker.jpg",
 	}
-	products = append(products, prd1, prd2, prd3, prd4, prd5)
+	productList = append(productList, prd1, prd2, prd3, prd4, prd5)
 }
