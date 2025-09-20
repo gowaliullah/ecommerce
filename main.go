@@ -17,6 +17,7 @@ type Product struct {
 var productList []Product
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(productList)
 }
 
