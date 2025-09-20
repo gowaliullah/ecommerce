@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -14,6 +15,10 @@ type Product struct {
 }
 
 var productList []Product
+
+func getProducts(w http.ResponseWriter, r *http.Request) {
+	json.NewEncoder(w).Encode(productList)
+}
 
 func welcome(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Welcome to my ecommerce......!")
