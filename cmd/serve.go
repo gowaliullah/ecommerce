@@ -13,11 +13,13 @@ func Serve() {
 
 	manager := middleware.NewManager()
 
-	m := manager.With(middleware.Logger, middleware.Logger)
-
 	mux := http.NewServeMux()
 
-	mux.Handle("GET /", m(http.HandlerFunc(handlers.Welcome)))
+	mux.Handle("GET /", manager.With2(
+		http.HandlerFunc(handlers.Welcome),
+		middleware.Logger,
+		middleware.Logger,
+	))
 
 	mux.Handle("GET /products", http.HandlerFunc(products.GetProducts))
 
