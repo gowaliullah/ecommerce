@@ -72,10 +72,13 @@ func welcome(w http.ResponseWriter, r *http.Request) {
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", welcome)
+	mux.Handle("/", http.HandlerFunc(welcome))
 
-	mux.HandleFunc("/products", getProducts)
-	mux.HandleFunc("/create-product", createProduct)
+	// mux.Handle("/products", http.HandlerFunc(getProducts))
+
+	mux.Handle("GET products", CorsMiddleware(http.HandlerFunc(getProducts)))
+
+	mux.Handle("/create-product", http.HandlerFunc(createProduct))
 
 	fmt.Println("Server running port on:8080")
 	err := http.ListenAndServe(":8080", mux)
