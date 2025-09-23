@@ -5,25 +5,15 @@ import (
 	"net/http"
 
 	"github.com/gowalillah/ecommerce/middleware"
-	"github.com/gowalillah/ecommerce/rest/handlers"
-	"github.com/gowalillah/ecommerce/rest/handlers/products"
 )
 
 func Serve() {
 
+	mux := http.NewServeMux()
 	manager := middleware.NewManager()
-
 	manager.Use(middleware.Logger, middleware.Logger, middleware.Logger)
 
-	mux := http.NewServeMux()
-
-	mux.Handle("GET /", manager.With(
-		http.HandlerFunc(handlers.Welcome),
-	))
-
-	mux.Handle("GET /products", http.HandlerFunc(products.GetProducts))
-
-	mux.Handle("/create-product", http.HandlerFunc(products.CreateProduct))
+	initRoutes(mux, manager)
 
 	fmt.Println("Server running port on:8080")
 	err := http.ListenAndServe(":8080", middleware.GlobalRouter(mux))
