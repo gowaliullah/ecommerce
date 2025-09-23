@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gowalillah/ecommerce/middlewares"
 )
 
 type Product struct {
@@ -17,38 +19,10 @@ type Product struct {
 var productList []Product
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "application/json")
-
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(200)
-		return
-	}
-
-	if r.Method != http.MethodGet {
-		http.Error(w, "Plz give me GET method", http.StatusBadRequest)
-		return
-	}
-
 	json.NewEncoder(w).Encode(productList)
 }
 
 func createProduct(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Content-Type", "application/json")
-
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(200)
-		// return
-	}
-
-	if r.Method != http.MethodPost {
-		http.Error(w, "Plz give me POST method", http.StatusBadRequest)
-		return
-	}
-
 	var newProduct Product
 	err := json.NewDecoder(r.Body).Decode(&newProduct)
 	if err != nil {
@@ -76,12 +50,12 @@ func main() {
 
 	// mux.Handle("/products", http.HandlerFunc(getProducts))
 
-	mux.Handle("GET products", CorsMiddleware(http.HandlerFunc(getProducts)))
+	mux.Handle("GET products", middlewares.CorsMiddleware(http.HandlerFunc(getProducts)))
 
 	mux.Handle("/create-product", http.HandlerFunc(createProduct))
 
 	fmt.Println("Server running port on:8080")
-	err := http.ListenAndServe(":8080", mux)
+	err := http.ListenAndServe(":8080", middlewares.GlobalRouter(mux))
 	if err != nil {
 		fmt.Println("Error from server", err)
 	}
