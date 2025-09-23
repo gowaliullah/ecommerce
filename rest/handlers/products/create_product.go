@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gowalillah/ecommerce/database"
 )
 
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
-	var newProduct Product
+	var newProduct database.Product
 	err := json.NewDecoder(r.Body).Decode(&newProduct)
 	if err != nil {
 		fmt.Println(err)
@@ -15,10 +17,10 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newProduct.ID = len(productList) + 1
-	productList = append(productList, newProduct)
+	newProduct.ID = len(database.ProductList) + 1
+	database.ProductList = append(database.ProductList, newProduct)
 
 	w.WriteHeader(http.StatusCreated)
 
-	json.NewEncoder(w).Encode(productList)
+	json.NewEncoder(w).Encode(database.ProductList)
 }
