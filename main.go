@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gowalillah/ecommerce/middlewares"
+	"github.com/gowalillah/ecommerce/cmd"
 )
 
 type Product struct {
@@ -44,21 +44,7 @@ func welcome(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	mux := http.NewServeMux()
-
-	mux.Handle("/", http.HandlerFunc(welcome))
-
-	// mux.Handle("/products", http.HandlerFunc(getProducts))
-
-	mux.Handle("GET products", middlewares.CorsMiddleware(http.HandlerFunc(getProducts)))
-
-	mux.Handle("/create-product", http.HandlerFunc(createProduct))
-
-	fmt.Println("Server running port on:8080")
-	err := http.ListenAndServe(":8080", middlewares.GlobalRouter(mux))
-	if err != nil {
-		fmt.Println("Error from server", err)
-	}
+	cmd.Serve()
 }
 
 func init() {
