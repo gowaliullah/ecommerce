@@ -7,13 +7,14 @@ import (
 )
 
 func Logger(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			start := time.Now()
 
-		next.ServeHTTP(w, r)
+			next.ServeHTTP(w, r)
 
-		diff := time.Since(start)
+			diff := time.Since(start)
 
-		log.Println(r.Method, r.URL.Path, diff)
-	})
+			log.Println(r.Method, r.URL.Path, diff)
+		})
 }

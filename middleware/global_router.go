@@ -3,7 +3,7 @@ package middleware
 import "net/http"
 
 func GlobalRouter(next *http.ServeMux) http.Handler {
-	hhh := func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -14,6 +14,5 @@ func GlobalRouter(next *http.ServeMux) http.Handler {
 			return
 		}
 		next.ServeHTTP(w, r)
-	}
-	return http.HandlerFunc(hhh)
+	})
 }
