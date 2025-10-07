@@ -33,4 +33,22 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager
 		),
 	)
 
+	mux.Handle(
+		"PUT /products/{id}",
+		manager.With(
+			http.HandlerFunc(
+				h.UpdateProduct,
+			),
+		),
+	)
+
+	mux.Handle(
+		"DELETE /products/{id}",
+		manager.With(
+			http.HandlerFunc(
+				h.DeleteProduct,
+			),
+		),
+	)
+
 }
