@@ -5,18 +5,22 @@ import (
 	"net/http"
 
 	"github.com/gowalillah/ecommerce/config"
+	"github.com/gowalillah/ecommerce/rest/handlers/product"
 	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
 type Server struct {
-	cnf *config.Config
+	cnf            *config.Config
+	productHandler *product.Handler
 }
 
 func NewServer(
 	cnf *config.Config,
+	productHandler *product.Handler,
 ) *Server {
 	return &Server{
-		cnf: cnf,
+		cnf:            cnf,
+		productHandler: productHandler,
 	}
 }
 

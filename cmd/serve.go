@@ -2,22 +2,46 @@ package cmd
 
 import (
 	"fmt"
-	"net/http"
+	"os"
 
+	"github.com/gowalillah/ecommerce/config"
+	"github.com/gowalillah/ecommerce/infra/db"
+	"github.com/gowalillah/ecommerce/product"
+	"github.com/gowalillah/ecommerce/repo"
+	"github.com/gowalillah/ecommerce/rest"
+	productHandler "github.com/gowalillah/ecommerce/rest/handlers/product"
 	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
 func Serve() {
 
-	mux := http.NewServeMux()
-	manager := middleware.NewManager()
-	manager.Use(middleware.Logger, middleware.Logger, middleware.Logger)
+	cnf := config.GetConfig()
 
-	initRoutes(mux, manager)
-
-	fmt.Println("Server running port on:8080")
-	err := http.ListenAndServe(":8080", middleware.GlobalRouter(mux))
+	dbCon, err := db.NewConnection(cnf.DB)
 	if err != nil {
-		fmt.Println("Error from server", err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
+
+	err = db.MigrateDB(dbCon, "./migrations")
+	if err != nil {
+		fmt.Println("Error from migration", err)
+		os.Exit(1)
+	}
+
+	// repos
+	productRepo := repo.NewProductRepo(*dbCon)
+
+	// domains
+	productSrc := product.NewService(productRepo)
+
+	middlewares := middleware.NewMiddlewares(cnf)
+
+	// handlers
+	productHdl := productHandler.NewHandler(middlewares, productSrc)
+
+	server := rest.NewServer(cnf, productHdl)
+
+	server.Start()
+
 }
