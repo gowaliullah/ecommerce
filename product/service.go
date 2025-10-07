@@ -1,6 +1,8 @@
 package product
 
-import "github.com/gowalillah/ecommerce/domain"
+import (
+	"github.com/gowalillah/ecommerce/domain"
+)
 
 type service struct {
 	prdRepo ProductRepo

@@ -55,6 +55,7 @@ func (r *productRepo) Count() (int64, error) {
 }
 
 func (r *productRepo) List() ([]*domain.Product, error) {
+
 	query := `SELECT id, title, description, price, stock, img_url FROM products`
 
 	var products []*domain.Product

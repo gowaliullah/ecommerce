@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gowalillah/ecommerce/config"
 	"github.com/gowalillah/ecommerce/rest/handlers/product"
@@ -32,10 +33,12 @@ func (server *Server) Start() {
 	// Wrap the mux with the middleware
 	wrappedMux := manager.WrapMux(mux)
 
-	// initRoutes(mux, manager)
+	server.productHandler.RegisterRoutes(mux, manager)
 
-	fmt.Println("Server running port on:8080")
-	err := http.ListenAndServe(":8080", wrappedMux)
+	addr := ":" + strconv.Itoa(server.cnf.HttpPort) // type casting (int64 to string)
+
+	fmt.Println("Server running PORT:", addr)
+	err := http.ListenAndServe(addr, wrappedMux)
 	if err != nil {
 		fmt.Println("Error from server", err)
 	}

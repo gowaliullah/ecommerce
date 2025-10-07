@@ -139,5 +139,6 @@ func GetConfig() *Config {
 	if config == nil {
 		loadConfig()
 	}
+
 	return config
 }
