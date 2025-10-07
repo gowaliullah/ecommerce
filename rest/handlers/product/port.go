@@ -2,7 +2,7 @@ package product
 
 import "github.com/gowalillah/ecommerce/domain"
 
-type Port interface {
+type Service interface {
 	Create(domain.Product) (*domain.Product, error)
 	Get(id int) (*domain.Product, error)
 	List() ([]*domain.Product, error)
