@@ -2,25 +2,43 @@ package product
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
-	"github.com/gowalillah/ecommerce/database"
+	"github.com/gowalillah/ecommerce/domain"
+	"github.com/gowalillah/ecommerce/util"
 )
 
-func CreateProduct(w http.ResponseWriter, r *http.Request) {
-	var newProduct database.Product
-	err := json.NewDecoder(r.Body).Decode(&newProduct)
+type ReqCreatedProduct struct {
+	Title       string  `json:"title"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Stock       int     `json:"stock"`
+	ImgUrl      string  `json:"img_url"`
+}
+
+func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
+
+	var req ReqCreatedProduct
+
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&req)
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "Plz give me valid JSON", http.StatusBadRequest)
+		http.Error(w, "Provide valid JSON data", http.StatusBadRequest)
 		return
 	}
 
-	newProduct.ID = len(database.ProductList) + 1
-	database.ProductList = append(database.ProductList, newProduct)
+	createdProduct, err := h.svc.Create(domain.Product{
+		Title:       req.Title,
+		Description: req.Description,
+		Price:       req.Price,
+		Stock:       req.Stock,
+		ImgUrl:      req.ImgUrl,
+	})
 
-	w.WriteHeader(http.StatusCreated)
+	if err != nil {
+		http.Error(w, "Failed to create product", http.StatusInternalServerError)
+		return
+	}
 
-	json.NewEncoder(w).Encode(database.ProductList)
+	util.SendData(w, http.StatusCreated, createdProduct)
 }
