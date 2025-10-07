@@ -3,9 +3,9 @@ package cmd
 import (
 	"net/http"
 
-	"github.com/gowalillah/ecommerce/middleware"
 	"github.com/gowalillah/ecommerce/rest/handlers"
 	"github.com/gowalillah/ecommerce/rest/handlers/products"
+	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
 func initRoutes(mux *http.ServeMux, manager *middleware.Manager) {

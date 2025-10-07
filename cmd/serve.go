@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gowalillah/ecommerce/middleware"
+	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
 func Serve() {
