@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gowalillah/ecommerce/config"
-	"github.com/gowalillah/ecommerce/middleware"
+	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
 type Server struct {
