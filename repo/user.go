@@ -99,6 +99,13 @@ func (r *userRepo) Update(u domain.User) (*domain.User, error) {
 	return &u, nil
 }
 
-func (r *userRepo) Delete() {
+func (r *userRepo) Delete(id int) error {
+	query := `DELETE FROM users WHERE id = $1`
 
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
