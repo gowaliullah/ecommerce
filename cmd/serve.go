@@ -10,6 +10,7 @@ import (
 	"github.com/gowalillah/ecommerce/repo"
 	"github.com/gowalillah/ecommerce/rest"
 	productHandler "github.com/gowalillah/ecommerce/rest/handlers/product"
+	userHandler "github.com/gowalillah/ecommerce/rest/handlers/user"
 	"github.com/gowalillah/ecommerce/rest/middleware"
 	"github.com/gowalillah/ecommerce/user"
 )
@@ -42,8 +43,9 @@ func Serve() {
 
 	// handlers
 	productHdl := productHandler.NewHandler(middlewares, productSrc)
+	usrHnadler := userHandler.NewHandler(cnf, userSrc)
 
-	server := rest.NewServer(cnf, userSrc, productHdl)
+	server := rest.NewServer(cnf, productHdl, usrHnadler)
 
 	server.Start()
 
