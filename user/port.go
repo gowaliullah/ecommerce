@@ -9,7 +9,7 @@ type Service interface {
 	usrHandler.Service
 }
 
-type ProductRepo interface {
+type UserRepo interface {
 	Create(u domain.User) (*domain.User, error)
 	Get(id int) (*domain.User, error)
 	List() ([]*domain.User, error)
