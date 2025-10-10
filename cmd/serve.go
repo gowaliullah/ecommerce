@@ -11,6 +11,7 @@ import (
 	"github.com/gowalillah/ecommerce/rest"
 	productHandler "github.com/gowalillah/ecommerce/rest/handlers/product"
 	"github.com/gowalillah/ecommerce/rest/middleware"
+	"github.com/gowalillah/ecommerce/user"
 )
 
 func Serve() {
