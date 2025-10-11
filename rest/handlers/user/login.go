@@ -40,7 +40,6 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		FirstName: usr.FirstName,
 		LastName:  usr.LastName,
 		Email:     usr.Email,
-		Password:  usr.Password,
 		Role:      usr.Role,
 	})
 

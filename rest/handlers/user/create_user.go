@@ -42,8 +42,6 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Role:      req.Role,
 	})
 
-	fmt.Println("Error from: provice valid JSON but then occers error")
-
 	if err != nil {
 		http.Error(w, "Internal server err", http.StatusInternalServerError)
 		return

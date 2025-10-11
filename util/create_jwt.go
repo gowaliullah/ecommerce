@@ -17,7 +17,6 @@ type Payload struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
-	Password  string `json:"-" db:"password"`
 	Role      string `json:"role" db:"role"`
 }
 
