@@ -35,17 +35,19 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// accessToken, err := util.CreateJWT(h.cnf.JwtSecretKey, util.Payload{
-	// 	Sub:       usr.ID,
-	// 	FirstName: usr.FirstName,
-	// 	LastName:  usr.LastName,
-	// 	Email:     usr.Email,
-	// })
+	accessToken, err := util.CreateJWT(h.cnf.JwtSecretKey, util.Payload{
+		ID:        usr.ID,
+		FirstName: usr.FirstName,
+		LastName:  usr.LastName,
+		Email:     usr.Email,
+		Password:  usr.Password,
+		Role:      usr.Role,
+	})
 
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	// fmt.Println(accessToken)
-	// util.SendData(w, accessToken, http.StatusOK)
+	fmt.Println(accessToken)
+	util.SendData(w, http.StatusOK, accessToken)
 }
