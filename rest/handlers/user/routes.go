@@ -20,7 +20,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager
 		"GET /users",
 		manager.With(
 			http.HandlerFunc(
-				h.GetProducts,
+				h.GetUsers,
 			),
 		),
 	)

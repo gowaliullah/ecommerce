@@ -1,6 +1,9 @@
 package repo
 
 import (
+	"database/sql"
+	"fmt"
+
 	"github.com/gowalillah/ecommerce/domain"
 	"github.com/gowalillah/ecommerce/user"
 	"github.com/jmoiron/sqlx"
@@ -20,23 +23,60 @@ func NewUserRepo(db sqlx.DB) UserRepo {
 	}
 }
 
-func (r *userRepo) Create(u domain.User) (*domain.User, error) {
+func (r *userRepo) Create(user domain.User) (*domain.User, error) {
 	query := `
-		INSERT INTRO users (
-			first_name, last_name, email, password, role
-			) VALUES (
-			 $1, $2, $3, $4, $5
-			) RETURNING id
-			`
+		INSERT INTO users (
+			first_name,
+			last_name,
+			email,
+			password,
+			role
+		)
+		VALUES (
+			:first_name,
+			:last_name,
+			:email,
+			:password,
+			:role
+		)
+		RETURNING id
+	`
 
-	row := r.db.QueryRow(query, u.FirstName, u.LastName, u.Email, u.Password, u.Role)
-
-	err := row.Scan(&u.ID)
+	var userId int
+	rows, err := r.db.NamedQuery(query, user)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
-	return &u, nil
+	if rows.Next() {
+		err = rows.Scan(&userId)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	user.ID = userId
+	return &user, nil
+}
+
+func (r *userRepo) Find(email, pass string) (*domain.User, error) {
+	var user domain.User
+
+	query := `
+			SELECT id, first_name, last_name, email, password, role 
+			FROM users 
+			WHERE email = $1 AND password = $2
+			LIMIT = 2
+		`
+	err := r.db.Get(&user, query, email, pass)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (r *userRepo) Count() (int64, error) {
