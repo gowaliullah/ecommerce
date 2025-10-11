@@ -13,7 +13,29 @@ func NewService(usrRepo UserRepo) Service {
 }
 
 func (svc *service) Create(u domain.User) (*domain.User, error) {
-	return svc.usrRepo.Create(u)
+	user, err := svc.usrRepo.Create(u)
+	if err != nil {
+		return nil, err
+	}
+
+	if user == nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (svc *service) Find(email, pass string) (*domain.User, error) {
+	user, err := svc.usrRepo.Find(email, pass)
+	if err != nil {
+		return nil, err
+	}
+
+	if user == nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (svc *service) Count() (int64, error) {
