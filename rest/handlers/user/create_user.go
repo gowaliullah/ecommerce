@@ -40,9 +40,9 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Email:     req.Email,
 		Password:  req.Password,
 		Role:      req.Role,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
 	})
+
+	fmt.Println("Error from: provice valid JSON but then occers error")
 
 	if err != nil {
 		http.Error(w, "Internal server err", http.StatusInternalServerError)
