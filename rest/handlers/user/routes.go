@@ -34,4 +34,13 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager
 		),
 	)
 
+	mux.Handle(
+		"GET /users/{id}",
+		manager.With(
+			http.HandlerFunc(
+				h.GetUser,
+			),
+		),
+	)
+
 }

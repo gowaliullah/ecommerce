@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gowalillah/ecommerce/config"
@@ -32,7 +33,10 @@ func NewServer(
 func (server *Server) Start() {
 	mux := http.NewServeMux()
 	manager := middleware.NewManager()
-	manager.Use(middleware.Logger)
+	manager.Use(
+		middleware.Preflight,
+		middleware.Logger,
+	)
 
 	// Wrap the mux with the middleware
 	wrappedMux := manager.WrapMux(mux)
@@ -46,5 +50,6 @@ func (server *Server) Start() {
 	err := http.ListenAndServe(addr, wrappedMux)
 	if err != nil {
 		fmt.Println("Error from server", err)
+		os.Exit(1)
 	}
 }

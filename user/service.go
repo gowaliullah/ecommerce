@@ -1,6 +1,10 @@
 package user
 
-import "github.com/gowalillah/ecommerce/domain"
+import (
+	"fmt"
+
+	"github.com/gowalillah/ecommerce/domain"
+)
 
 type service struct {
 	usrRepo UserRepo
@@ -19,7 +23,7 @@ func (svc *service) Create(u domain.User) (*domain.User, error) {
 	}
 
 	if user == nil {
-		return nil, err
+		return nil, nil
 	}
 
 	return user, nil
@@ -27,12 +31,14 @@ func (svc *service) Create(u domain.User) (*domain.User, error) {
 
 func (svc *service) Find(email, pass string) (*domain.User, error) {
 	user, err := svc.usrRepo.Find(email, pass)
+	fmt.Println("user from user/service: ", user)
+	fmt.Println("err from user/service: ", err)
 	if err != nil {
 		return nil, err
 	}
 
 	if user == nil {
-		return nil, err
+		return nil, nil
 	}
 
 	return user, nil

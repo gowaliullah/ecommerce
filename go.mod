@@ -11,4 +11,7 @@ require (
 	github.com/rubenv/sql-migrate v1.8.0
 )
 
-require github.com/go-gorp/gorp/v3 v3.1.0 // indirect
+require (
+	github.com/go-gorp/gorp/v3 v3.1.0 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+)

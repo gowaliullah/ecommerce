@@ -6,6 +6,7 @@ import (
 
 	"github.com/gowalillah/ecommerce/config"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func GetConnectionString(cnf *config.DBConfig) string {

@@ -4,9 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+
 	"github.com/gowalillah/ecommerce/domain"
 	"github.com/gowalillah/ecommerce/user"
-	"github.com/jmoiron/sqlx"
 )
 
 type UserRepo interface {
@@ -14,10 +16,10 @@ type UserRepo interface {
 }
 
 type userRepo struct {
-	db sqlx.DB
+	db *sqlx.DB
 }
 
-func NewUserRepo(db sqlx.DB) UserRepo {
+func NewUserRepo(db *sqlx.DB) UserRepo {
 	return &userRepo{
 		db: db,
 	}
@@ -64,11 +66,12 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 	var user domain.User
 
 	query := `
-			SELECT id, first_name, last_name, email, password, role 
-			FROM users 
-			WHERE email = $1 AND password = $2
-			LIMIT = 2
-		`
+		SELECT id, first_name, last_name, email, password, role
+		FROM users
+		WHERE email = $1 AND password = $2
+		LIMIT 1
+	`
+
 	err := r.db.Get(&user, query, email, pass)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -78,6 +81,25 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 	}
 	return &user, nil
 }
+
+// func (r *userRepo) Find(email, pass string) (*domain.User, error) {
+// 	var user domain.User
+
+// 	query := `
+// 			SELECT id, first_name, last_name, email, password, role
+// 			FROM users
+// 			WHERE email = $1 AND password = $2
+// 			LIMIT 1
+// 		`
+// 	err := r.db.Get(&user, query, email, pass)
+// 	if err != nil {
+// 		if err == sql.ErrNoRows {
+// 			return nil, nil
+// 		}
+// 		return nil, err
+// 	}
+// 	return &user, nil
+// }
 
 func (r *userRepo) Count() (int64, error) {
 	query := `SELECT COUNT(*) FROM users`

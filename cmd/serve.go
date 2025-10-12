@@ -33,11 +33,11 @@ func Serve() {
 
 	// repos
 	productRepo := repo.NewProductRepo(*dbCon)
-	userRepo := repo.NewUserRepo(*dbCon)
+	userRepo := repo.NewUserRepo(dbCon)
 
 	// domains
-	productSrc := product.NewService(productRepo)
 	userSrc := user.NewService(userRepo)
+	productSrc := product.NewService(productRepo)
 
 	middlewares := middleware.NewMiddlewares(cnf)
 
@@ -46,7 +46,5 @@ func Serve() {
 	usrHnadler := userHandler.NewHandler(cnf, userSrc)
 
 	server := rest.NewServer(cnf, productHdl, usrHnadler)
-
 	server.Start()
-
 }
