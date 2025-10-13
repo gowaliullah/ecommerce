@@ -16,17 +16,21 @@ type Server struct {
 	cnf            *config.Config
 	productHandler *product.Handler
 	userHandler    *user.Handler
+	// categoryHandler *category.Handler
 }
 
 func NewServer(
 	cnf *config.Config,
 	productHandler *product.Handler,
 	userHandler *user.Handler,
+	// categoryHandler *category.Handler,
+
 ) *Server {
 	return &Server{
 		cnf:            cnf,
 		productHandler: productHandler,
 		userHandler:    userHandler,
+		// categoryHandler: categoryHandler,
 	}
 }
 
@@ -43,6 +47,7 @@ func (server *Server) Start() {
 
 	server.productHandler.RegisterRoutes(mux, manager)
 	server.userHandler.RegisterRoutes(mux, manager)
+	// server.categoryHandler.RegisterRoutes(mux, manager)
 
 	addr := ":" + strconv.Itoa(server.cnf.HttpPort) // type casting (int64 to string)
 
