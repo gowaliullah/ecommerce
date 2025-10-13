@@ -24,11 +24,9 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(req.Email, req.Password)
-
 	usr, err := h.svc.Find(req.Email, req.Password)
 
-	fmt.Println("usr: ", usr)
+	// fmt.Println("usr: ", usr.FirstName, usr.LastName, usr.Email)
 	fmt.Println("err: ", err)
 
 	if err != nil {
@@ -37,7 +35,6 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if usr == nil {
-		fmt.Println("From here")
 		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}

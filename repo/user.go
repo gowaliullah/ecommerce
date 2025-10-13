@@ -26,39 +26,23 @@ func NewUserRepo(db *sqlx.DB) UserRepo {
 }
 
 func (r *userRepo) Create(user domain.User) (*domain.User, error) {
+
 	query := `
-		INSERT INTO users (
-			first_name,
-			last_name,
-			email,
-			password,
-			role
-		)
-		VALUES (
-			:first_name,
-			:last_name,
-			:email,
-			:password,
-			:role
+		INSERT INTO users(first_name, last_name, email, password, role) VALUES(
+		$1, $2, $3, $4, $5
 		)
 		RETURNING id
 	`
 
-	var userId int
-	rows, err := r.db.NamedQuery(query, user)
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
+	row := r.db.QueryRow(query, user.FirstName, user.LastName, user.Email, user.Password, user.Role)
+
+	if row.Err() != nil {
+		fmt.Println("err", row.Err())
+		return nil, row.Err()
 	}
 
-	if rows.Next() {
-		err = rows.Scan(&userId)
-		if err != nil {
-			return nil, err
-		}
-	}
+	row.Scan(&user.ID)
 
-	user.ID = userId
 	return &user, nil
 }
 
@@ -72,6 +56,7 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 		LIMIT 1
 	`
 
+	fmt.Println("repo: ", email, pass)
 	err := r.db.Get(&user, query, email, pass)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -81,25 +66,6 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 	}
 	return &user, nil
 }
-
-// func (r *userRepo) Find(email, pass string) (*domain.User, error) {
-// 	var user domain.User
-
-// 	query := `
-// 			SELECT id, first_name, last_name, email, password, role
-// 			FROM users
-// 			WHERE email = $1 AND password = $2
-// 			LIMIT 1
-// 		`
-// 	err := r.db.Get(&user, query, email, pass)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			return nil, nil
-// 		}
-// 		return nil, err
-// 	}
-// 	return &user, nil
-// }
 
 func (r *userRepo) Count() (int64, error) {
 	query := `SELECT COUNT(*) FROM users`
