@@ -56,6 +56,20 @@ func (r *categoryRepo) List() ([]*domain.Category, error) {
 }
 
 
+func (r *categoryRepo) Get(id int) (*domain.Category, error) {
+	query := `
+		SELECT id, name, image_url WHERE id = $1
+ 	`
+	var c domain.Category
+
+	err := r.db.Get(&c, query, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
+
 func (r *categoryRepo)  {
 	
 }
