@@ -69,7 +69,20 @@ func (r *categoryRepo) Get(id int) (*domain.Category, error) {
 
 	return &c, nil
 }
+func (r *categoryRepo) Update(c domain.Category) (*domain.Category, error) {
+	query := `
+		UPDATE categories SET 
+		name = $1,
+		image_url = $2
+	WHERE id = $3
+	`
+	_, err := r.db.Exec(query, c.Name, c.ImageUrl)
+	if err != nil {
+		return nil, err
+	}
 
+	return &c, nil
+}
 func (r *categoryRepo)  {
 	
 }
