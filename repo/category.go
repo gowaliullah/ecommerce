@@ -39,15 +39,23 @@ func (r *categoryRepo) Create(c domain.Category) (*domain.Category, error) {
 	
 	return &c, nil
 }
-func (r *categoryRepo)  {
-	
+
+
+func (r *categoryRepo) List() ([]*domain.Category, error) {
+	query := `SELECT id, name, image_url`
+
+	var categories []*domain.Category
+
+	err := r.db.Select(&categories, query)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return categories, nil
 }
-func (r *categoryRepo)  {
-	
-}
-func (r *categoryRepo)  {
-	
-}
+
+
 func (r *categoryRepo)  {
 	
 }
