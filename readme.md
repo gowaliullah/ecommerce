@@ -21,47 +21,64 @@ This project is designed to power a modern e-commerce platform with features lik
 
 ## 🗂️ Project Structure
 
-gocommerce-backend/
-│
-├── cmd/
-│ └── main.go # App entry point
-│
-├── internal/
-│ ├── config/ # Environment & DB config
-│ ├── models/ # Data models (structs)
-│ ├── handlers/ # Route handlers (controllers)
-│ ├── repositories/ # DB queries
-│ ├── services/ # Business logic
-│ ├── middlewares/ # JWT, auth, logging
-│ └── routes/ # API route definitions
-│
-├── pkg/
-│ └── utils/ # Helper functions
-│
-├── go.mod
-├── go.sum
-├── .env.example
-└── README.md
 
+---
 
-🧭 API Endpoints
-👤 Auth
-Method	Endpoint	Description
-POST	/api/auth/register	Register a new user
-POST	/api/auth/login	Login and get JWT token
+## 🔗 API Endpoints
 
+### 👤 **Auth Routes**
+| Method | Endpoint | Description |
+|--------|-----------|-------------|
+| `POST` | `/api/auth/register` | Register a new user |
+| `POST` | `/api/auth/login` | Login user and receive JWT token |
 
-🛒 Products
-Method	Endpoint	Description
-GET	/api/products	Get all products
-GET	/api/products/:id	Get product by ID
-POST	/api/products	Create product (Admin only)
-PUT	/api/products/:id	Update product (Admin only)
-DELETE	/api/products/:id	Delete product (Admin only)
+---
 
+### 🛒 **Product Routes**
+| Method | Endpoint | Description | Access |
+|--------|-----------|-------------|--------|
+| `GET` | `/api/products` | Get all products | Public |
+| `GET` | `/api/products/:id` | Get product by ID | Public |
+| `POST` | `/api/products` | Create product | Admin |
+| `PUT` | `/api/products/:id` | Update product | Admin |
+| `DELETE` | `/api/products/:id` | Delete product | Admin |
 
-📦 Orders
-Method	Endpoint	Description
-GET	/api/orders	Get all orders (Admin)
-POST	/api/orders	Create new order (User)
-PUT	/api/orders/:id	Update order status (Admin)
+---
+
+### 📦 **Order Routes**
+| Method | Endpoint | Description | Access |
+|--------|-----------|-------------|--------|
+| `GET` | `/api/orders` | Get all orders (Admin) | Admin |
+| `POST` | `/api/orders` | Create a new order | Authenticated User |
+| `GET` | `/api/orders/:id` | Get order details | Authenticated User |
+| `PUT` | `/api/orders/:id` | Update order status | Admin |
+
+---
+
+### 🧑‍💼 **Admin Routes**
+| Method | Endpoint | Description | Access |
+|--------|-----------|-------------|--------|
+| `GET` | `/api/admin/dashboard` | Get summary stats (users, sales, orders) | Admin |
+| `GET` | `/api/admin/users` | Get all registered users | Admin |
+| `PUT` | `/api/admin/users/:id/role` | Update user role | Admin |
+
+---
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in your root directory:
+
+```bash
+# PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=yourpassword
+DB_NAME=gocommerce
+
+# JWT
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRE_HOURS=24
+
+# Server
+PORT=8080
