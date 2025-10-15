@@ -6,7 +6,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-
 type CategoryRepo interface {
 	category.CategoryRepo
 }
@@ -15,13 +14,11 @@ type categoryRepo struct {
 	db sqlx.DB
 }
 
-
 func NewCategoryRepo(db sqlx.DB) CategoryRepo {
 	return &categoryRepo{
 		db: db,
 	}
 }
-
 
 func (r *categoryRepo) Create(c domain.Category) (*domain.Category, error) {
 	query := `
@@ -36,10 +33,9 @@ func (r *categoryRepo) Create(c domain.Category) (*domain.Category, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return &c, nil
 }
-
 
 func (r *categoryRepo) List() ([]*domain.Category, error) {
 	query := `SELECT id, name, image_url`
@@ -54,7 +50,6 @@ func (r *categoryRepo) List() ([]*domain.Category, error) {
 
 	return categories, nil
 }
-
 
 func (r *categoryRepo) Get(id int) (*domain.Category, error) {
 	query := `
@@ -83,9 +78,12 @@ func (r *categoryRepo) Update(c domain.Category) (*domain.Category, error) {
 
 	return &c, nil
 }
-func (r *categoryRepo)  {
-	
-}
-func (r *categoryRepo)  {
-	
+func (r *categoryRepo) Delete(id int) error {
+	query := `DELETE FROM categories WHERE id = $1`
+
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
