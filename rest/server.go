@@ -7,30 +7,31 @@ import (
 	"strconv"
 
 	"github.com/gowalillah/ecommerce/config"
+	"github.com/gowalillah/ecommerce/rest/handlers/category"
 	"github.com/gowalillah/ecommerce/rest/handlers/product"
 	"github.com/gowalillah/ecommerce/rest/handlers/user"
 	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
 type Server struct {
-	cnf            *config.Config
-	productHandler *product.Handler
-	userHandler    *user.Handler
-	// categoryHandler *category.Handler
+	cnf             *config.Config
+	userHandler     *user.Handler
+	categoryHandler *category.Handler
+	productHandler  *product.Handler
 }
 
 func NewServer(
 	cnf *config.Config,
-	productHandler *product.Handler,
 	userHandler *user.Handler,
-	// categoryHandler *category.Handler,
+	categoryHandler *category.Handler,
+	productHandler *product.Handler,
 
 ) *Server {
 	return &Server{
-		cnf:            cnf,
-		productHandler: productHandler,
-		userHandler:    userHandler,
-		// categoryHandler: categoryHandler,
+		cnf:             cnf,
+		userHandler:     userHandler,
+		categoryHandler: categoryHandler,
+		productHandler:  productHandler,
 	}
 }
 
@@ -47,7 +48,7 @@ func (server *Server) Start() {
 
 	server.productHandler.RegisterRoutes(mux, manager)
 	server.userHandler.RegisterRoutes(mux, manager)
-	// server.categoryHandler.RegisterRoutes(mux, manager)
+	server.categoryHandler.RegisterRoutes(mux, manager)
 
 	addr := ":" + strconv.Itoa(server.cnf.HttpPort) // type casting (int64 to string)
 

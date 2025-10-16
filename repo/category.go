@@ -64,6 +64,7 @@ func (r *categoryRepo) Get(id int) (*domain.Category, error) {
 
 	return &c, nil
 }
+
 func (r *categoryRepo) Update(c domain.Category) (*domain.Category, error) {
 	query := `
 		UPDATE categories SET 
@@ -78,6 +79,7 @@ func (r *categoryRepo) Update(c domain.Category) (*domain.Category, error) {
 
 	return &c, nil
 }
+
 func (r *categoryRepo) Delete(id int) error {
 	query := `DELETE FROM categories WHERE id = $1`
 

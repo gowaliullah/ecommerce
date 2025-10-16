@@ -9,8 +9,9 @@ type Product struct {
 	Price       float64 `json:"price" db:"price"`
 	Stock       int     `json:"stock" db:"stock"`
 	ImgUrl      string  `json:"img_url" db:"img_url"`
-	// Available   int       `json:"available" db:"available"`
 	// CategoryID  *int      `json:"category_id,omitempty" db:"category_id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
+
+// Available   int       `json:"available" db:"available"`

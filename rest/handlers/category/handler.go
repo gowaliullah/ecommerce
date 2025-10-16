@@ -12,4 +12,5 @@ func NewHandler(middlewares *middleware.Middlewares, svc Service) *Handler {
 		middlewares: middlewares,
 		svc:         svc,
 	}
+
 }
