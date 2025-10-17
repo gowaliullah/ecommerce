@@ -9,7 +9,7 @@ type Service interface {
 	cartHandler.Service
 }
 
-type CategoryRepo interface {
+type CartRepo interface {
 	Create(cart domain.Cart) (*domain.Cart, error)
 	Get(id int) (*domain.Cart, error)
 	List() ([]*domain.Cart, error)
