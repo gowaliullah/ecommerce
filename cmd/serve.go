@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gowalillah/ecommerce/cart"
 	"github.com/gowalillah/ecommerce/category"
 	"github.com/gowalillah/ecommerce/config"
 	"github.com/gowalillah/ecommerce/infra/db"
 	"github.com/gowalillah/ecommerce/product"
 	"github.com/gowalillah/ecommerce/repo"
 	"github.com/gowalillah/ecommerce/rest"
+	cartHandler "github.com/gowalillah/ecommerce/rest/handlers/cart"
 	categoryHandler "github.com/gowalillah/ecommerce/rest/handlers/category"
 	productHandler "github.com/gowalillah/ecommerce/rest/handlers/product"
 	userHandler "github.com/gowalillah/ecommerce/rest/handlers/user"
@@ -37,12 +39,13 @@ func Serve() {
 	userRepo := repo.NewUserRepo(dbCon)
 	productRepo := repo.NewProductRepo(*dbCon)
 	categoryRepo := repo.NewCategoryRepo(*dbCon)
-	cartHandler := repo.NewCategoryRepo(*dbCon)
+	cartRepo := repo.NewCartRepo(*dbCon)
 
 	// domains
 	userSrc := user.NewService(userRepo)
 	productSrc := product.NewService(productRepo)
 	categorySrc := category.NewService(categoryRepo)
+	cartSrc := cart.NewService(cartRepo)
 
 	middlewares := middleware.NewMiddlewares(cnf)
 
@@ -50,7 +53,8 @@ func Serve() {
 	usrHnadler := userHandler.NewHandler(cnf, userSrc)
 	catHandler := categoryHandler.NewHandler(middlewares, categorySrc)
 	productHdl := productHandler.NewHandler(middlewares, productSrc)
+	cartHdl := cartHandler.NewHandler(middlewares, cartSrc)
 
-	server := rest.NewServer(cnf, usrHnadler, catHandler, productHdl)
+	server := rest.NewServer(cnf, usrHnadler, catHandler, productHdl, cartHdl)
 	server.Start()
 }

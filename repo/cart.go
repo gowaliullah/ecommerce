@@ -1,91 +1,90 @@
-// package repo
+package repo
 
-// import (
-// 	"github.com/gowalillah/ecommerce/category"
-// 	"github.com/gowalillah/ecommerce/domain"
-// 	"github.com/jmoiron/sqlx"
-// )
+import (
+	"github.com/gowalillah/ecommerce/cart"
+	"github.com/gowalillah/ecommerce/domain"
+	"github.com/jmoiron/sqlx"
+)
 
-// type CategoryRepo interface {
-// 	category.CategoryRepo
-// }
+type CartRepo interface {
+	cart.CartRepo
+}
 
-// type categoryRepo struct {
-// 	db sqlx.DB
-// }
+type cartRepo struct {
+	db sqlx.DB
+}
 
-// func NewCategoryRepo(db sqlx.DB) CategoryRepo {
-// 	return &categoryRepo{
-// 		db: db,
-// 	}
-// }
+func NewCartRepo(db sqlx.DB) CartRepo {
+	return &cartRepo{
+		db: db,
+	}
+}
 
-// func (r *categoryRepo) Create(c domain.Category) (*domain.Category, error) {
-// 	query := `
-// 		INSERT INTO categories (
-// 			name image_url
-// 		) VALUES (
-// 			$1, $2
-// 		) RETURNING id
-// 	`
-// 	row := r.db.QueryRow(query, c.Name, c.ImageUrl)
-// 	err := row.Scan(&c.ID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+func (r *cartRepo) Create(c domain.Cart) (*domain.Cart, error) {
+	query := `
+		INSERT INTO carts (
+			user_id
+		) VALUES (
+			$1
+		) RETURNING id
+	`
+	row := r.db.QueryRow(query, c.UserID)
+	err := row.Scan(&c.ID)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &c, nil
-// }
+	return &c, nil
+}
 
-// func (r *categoryRepo) List() ([]*domain.Category, error) {
-// 	query := `SELECT id, name, image_url`
+func (r *cartRepo) List() ([]*domain.Cart, error) {
+	query := `SELECT id, user_id`
 
-// 	var categories []*domain.Category
+	var carts []*domain.Cart
 
-// 	err := r.db.Select(&categories, query)
+	err := r.db.Select(&carts, query)
 
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	if err != nil {
+		return nil, err
+	}
 
-// 	return categories, nil
-// }
+	return carts, nil
+}
 
-// func (r *categoryRepo) Get(id int) (*domain.Category, error) {
-// 	query := `
-// 		SELECT id, name, image_url WHERE id = $1
-//  	`
-// 	var c domain.Category
+func (r *cartRepo) Get(id int) (*domain.Cart, error) {
+	query := `
+		SELECT id, user_id WHERE id = $1
+ 	`
+	var c domain.Cart
 
-// 	err := r.db.Get(&c, query, id)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	err := r.db.Get(&c, query, id)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &c, nil
-// }
+	return &c, nil
+}
 
-// func (r *categoryRepo) Update(c domain.Category) (*domain.Category, error) {
-// 	query := `
-// 		UPDATE categories SET
-// 		name = $1,
-// 		image_url = $2
-// 	WHERE id = $3
-// 	`
-// 	_, err := r.db.Exec(query, c.Name, c.ImageUrl)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+func (r *cartRepo) Update(c domain.Cart) (*domain.Cart, error) {
+	query := `
+		UPDATE carts SET
+		user_id = $1,
+	WHERE id = $2
+	`
+	_, err := r.db.Exec(query, c.UserID)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &c, nil
-// }
+	return &c, nil
+}
 
-// func (r *categoryRepo) Delete(id int) error {
-// 	query := `DELETE FROM categories WHERE id = $1`
+func (r *cartRepo) Delete(id int) error {
+	query := `DELETE FROM carts WHERE id = $1`
 
-// 	_, err := r.db.Exec(query, id)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

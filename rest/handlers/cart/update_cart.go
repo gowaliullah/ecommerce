@@ -17,7 +17,7 @@ func (h *Handler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req domain.Category
+	var req domain.Cart
 
 	decoder := json.NewDecoder(r.Body)
 	err = decoder.Decode(&req)
