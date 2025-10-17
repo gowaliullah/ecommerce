@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gowalillah/ecommerce/config"
+	"github.com/gowalillah/ecommerce/rest/handlers/cart"
 	"github.com/gowalillah/ecommerce/rest/handlers/category"
 	"github.com/gowalillah/ecommerce/rest/handlers/product"
 	"github.com/gowalillah/ecommerce/rest/handlers/user"
@@ -18,6 +19,7 @@ type Server struct {
 	userHandler     *user.Handler
 	categoryHandler *category.Handler
 	productHandler  *product.Handler
+	cartHandler     *cart.Handler
 }
 
 func NewServer(
@@ -25,6 +27,7 @@ func NewServer(
 	userHandler *user.Handler,
 	categoryHandler *category.Handler,
 	productHandler *product.Handler,
+	cartHandler *cart.Handler,
 
 ) *Server {
 	return &Server{
@@ -32,6 +35,7 @@ func NewServer(
 		userHandler:     userHandler,
 		categoryHandler: categoryHandler,
 		productHandler:  productHandler,
+		cartHandler:     cartHandler,
 	}
 }
 
