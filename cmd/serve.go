@@ -37,6 +37,7 @@ func Serve() {
 	userRepo := repo.NewUserRepo(dbCon)
 	productRepo := repo.NewProductRepo(*dbCon)
 	categoryRepo := repo.NewCategoryRepo(*dbCon)
+	cartHandler := repo.NewCategoryRepo(*dbCon)
 
 	// domains
 	userSrc := user.NewService(userRepo)
