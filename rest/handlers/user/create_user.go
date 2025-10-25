@@ -10,9 +10,9 @@ import (
 )
 
 type ResUser struct {
+	Message   string `json:"message"`
 	ID        int    `json:"id"`
 	Unique_id string `json:"unique_id"`
-	Message   string `json:"message"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
@@ -47,7 +47,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		http.Error(w, "Internal server err", http.StatusInternalServerError)
+		util.SendError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 

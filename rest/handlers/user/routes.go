@@ -9,7 +9,7 @@ import (
 func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
 
 	mux.Handle(
-		"POST /users",
+		"POST /users/register",
 		manager.With(
 			http.HandlerFunc(
 				h.CreateUser),

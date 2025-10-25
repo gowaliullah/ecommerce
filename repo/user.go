@@ -32,7 +32,7 @@ func (r *userRepo) Create(user domain.User) (*domain.User, error) {
 	user.Uuid = uuid.New().String()
 	query := `
 		INSERT INTO users(unique_id, first_name, last_name, email, password, role) VALUES(
-		$1, $2, $3, $4, $5, &6
+		$1, $2, $3, $4, $5, $6
 		)
 		RETURNING id
 	`
@@ -61,22 +61,20 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 	query := `
 		SELECT id, unique_id, first_name, last_name, email, password, role
 		FROM users
-		WHERE email = $1 AND password = $2
+		WHERE email =$1
 		LIMIT 1
 	`
 
-	fmt.Println("repo: ", email, pass)
-	err := r.db.Get(&user, query, email, pass)
+	err := r.db.Get(&user, query, email)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil
+			return nil, err
 		}
 		return nil, err
 	}
 
 	ok, err := util.CheckHashedassword(pass, user.Password)
 	if !ok {
-		fmt.Println(err)
 		return nil, err
 	}
 
@@ -99,7 +97,7 @@ func (r *userRepo) Count() (int64, error) {
 }
 
 func (r *userRepo) List() ([]*domain.User, error) {
-	query := `SELECT id, first_name, last_name, email, password, role FROM users`
+	query := `SELECT id, unique_id, first_name, last_name, email, password, role FROM users`
 
 	var users []*domain.User
 
@@ -112,7 +110,7 @@ func (r *userRepo) List() ([]*domain.User, error) {
 }
 
 func (r *userRepo) Get(id int) (*domain.User, error) {
-	query := `SELECT id, first_name, last_name, email, password, role FROM users WHERE id = $1`
+	query := `SELECT id, unique_id, first_name, last_name, email, password, role FROM users WHERE id = $1`
 
 	var usr domain.User
 

@@ -1,0 +1,83 @@
+@auth_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiIxNGVmZmQ2OS1iM2MzLTQwNjAtODVlNS1mM2UxYzFjMGYxMWUiLCJ1c2VybmFtZSI6Imdvd2FsaXVsbGFoIiwiZW1haWwiOiJ3YWxpdWxsYWhAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0.0Pyl6evPAQxBpV8axT0ir1aMGmYYvEwQnaE1TYGaa1o
+@host = localhost
+@content-Type = application/json
+@port = 5500
+
+
+# Create new user
+###
+POST http://{{host}}:{{port}}/users/register
+Content-Type: {{content-Type}}
+
+{
+    "username":"gowali",
+    "email":"wali@gmail.com",
+    "password":"123456",
+    "role":"admin"
+}
+
+###
+# login user
+POST http://{{host}}:{{port}}/users/login
+Content-Type: {{content-Type}} 
+
+{
+    "email":"waliullah@gmail.com",
+    "password":"waliullah"
+}
+
+### 
+# See list of users
+GET http://{{host}}:{{port}}/users
+Content-Type: {{content-Type}}
+Authorization: Bearer {{auth_token}}
+
+
+
+
+
+###
+# Create new shop
+POST http://{{host}}:{{port}}/shops
+Content-Type: {{content-Type}}
+Authorization: Bearer {{auth_token}}
+
+{
+    "contact": "+8801712345678",
+    "cover_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9gWcVm3Zl8_m3UVksH4YQsLv0sT6MoDJoZA&s",
+    "location": "256 Gulshan, Dhaka",
+    "name": "WH Laundry Shop",
+    "payment_details": "01712345678",
+    "shop_owner": "jobbar@gmail.com"
+}
+
+###
+# See list of shops
+GET http://{{host}}:{{port}}/shops?limit=0&page=0
+Content-Type: {{content-Type}}
+Authorization: Bearer {{auth_token}}
+
+###
+# Update shop info
+PUT http://{{host}}:{{port}}/shops/f76bc28f-bed2-4d08-802e-bf86792ce938
+Content-Type: {{content-Type}}
+Authorization : Bearer {{auth_token}}
+
+{
+    "name": "Updated Laundry Shop",
+    "location": "Updated 256 Gulshan, Dhaka",
+    "contact": "+8801712345679",
+    "payment_details": "01712345679"
+}
+
+###
+# Get single shop info
+GET http://{{host}}:{{port}}/shops/f76bc28f-bed2-4d08-802e-bf86792ce938
+Content-Type: {{content-Type}}
+Authorization : Bearer {{auth_token}}
+
+###
+# Delete a shop
+DELETE http://{{host}}:{{port}}/shops/f76bc28f-bed2-4d08-802e-bf86792ce938
+Content-Type: {{content-Type}}
+Authorization : Bearer {{auth_token}}
