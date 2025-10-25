@@ -1,3 +1,4 @@
+-- Active: 1755325089603@@127.0.0.1@5432@ecommerce
 
 
 CREATE TABLE addresses (

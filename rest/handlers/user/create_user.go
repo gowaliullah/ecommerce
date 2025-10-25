@@ -4,22 +4,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gowalillah/ecommerce/domain"
 	"github.com/gowalillah/ecommerce/util"
 )
 
-type ReqCreateUser struct {
-	// ID        int    `json:"id" db:"id"`
-	FirstName string `json:"first_name" db:"first_name"`
-	LastName  string `json:"last_name" db:"last_name"`
-	Email     string `json:"email" db:"email"`
-	Password  string `json:"password" db:"password"`
+type ResUser struct {
+	ID        int    `json:"id"`
+	Unique_id string `json:"unique_id"`
+	Message   string `json:"message"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Role      string `json:"role"`
 	// Role      UserRole  `json:"role" db:"role"`
-	Role      string    `json:"role" db:"role"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+}
+
+type ReqCreateUser struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
 
 func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -33,13 +39,11 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	createdUser, err := h.svc.Create(domain.User{
-		// ID:        req.ID,
+	user, err := h.svc.Create(domain.User{
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
 		Email:     req.Email,
 		Password:  req.Password,
-		Role:      req.Role,
 	})
 
 	if err != nil {
@@ -47,6 +51,14 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.SendData(w, http.StatusCreated, createdUser)
+	util.SendData(w, http.StatusCreated, ResUser{
+		Message:   "Successfully created user...!",
+		ID:        user.ID,
+		Unique_id: user.Uuid,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Role:      user.Role,
+	})
 
 }
