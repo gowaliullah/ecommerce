@@ -9,8 +9,13 @@ import (
 )
 
 type ReqLogin struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
+type ResLogin struct {
+	Message     string `json:"message"`
+	AccessToken string `json:"accessToken"`
 }
 
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
@@ -20,17 +25,13 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Please give me valid JSON", http.StatusBadRequest)
+		http.Error(w, "Please give me valid credentials", http.StatusBadRequest)
 		return
 	}
 
 	usr, err := h.svc.Find(req.Email, req.Password)
-
-	// fmt.Println("usr: ", usr.FirstName, usr.LastName, usr.Email)
-	fmt.Println("err: ", err)
-
 	if err != nil {
-		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
+		util.SendError(w, http.StatusNotFound, "Email or Password is incorrect")
 		return
 	}
 
@@ -51,6 +52,9 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(accessToken)
-	util.SendData(w, http.StatusOK, accessToken)
+
+	util.SendData(w, http.StatusOK, ResLogin{
+		Message:     "Successfully user login..!",
+		AccessToken: accessToken,
+	})
 }

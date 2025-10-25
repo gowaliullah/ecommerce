@@ -1,15 +1,20 @@
 package user
 
-import "github.com/gowalillah/ecommerce/config"
+import (
+	"github.com/gowalillah/ecommerce/config"
+	"github.com/gowalillah/ecommerce/rest/middleware"
+)
 
 type Handler struct {
-	cnf *config.Config
-	svc Service
+	middleware middleware.Middlewares
+	cnf        *config.Config
+	svc        Service
 }
 
-func NewHandler(cnf *config.Config, svc Service) *Handler {
+func NewHandler(middlewares *middleware.Middlewares, cnf *config.Config, svc Service) *Handler {
 	return &Handler{
-		cnf: cnf,
-		svc: svc,
+		middleware: *middlewares,
+		cnf:        cnf,
+		svc:        svc,
 	}
 }
