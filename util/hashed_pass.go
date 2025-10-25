@@ -16,3 +16,18 @@ func CreateHashPassword(password string) string {
 
 	return string(hashedPassword)
 }
+
+func ComparePassword(rawPassword, hashedPassword string) (bool, error) {
+
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(rawPassword))
+
+	if err != nil {
+		if err == bcrypt.ErrMismatchedHashAndPassword {
+			return false, err
+		}
+
+		return false, err
+	}
+
+	return true, nil
+}
