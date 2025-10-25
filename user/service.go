@@ -2,7 +2,6 @@ package user
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/gowalillah/ecommerce/domain"
 )
@@ -32,9 +31,6 @@ func (svc *service) Create(u domain.User) (*domain.User, error) {
 
 func (svc *service) Find(email, pass string) (*domain.User, error) {
 	user, err := svc.usrRepo.Find(email, pass)
-
-	fmt.Println("user from user/service: ", user)
-	fmt.Println("err from user/service: ", err)
 
 	if err != nil {
 		return nil, err

@@ -4,11 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 
 	"github.com/gowalillah/ecommerce/domain"
 	"github.com/gowalillah/ecommerce/user"
+	"github.com/gowalillah/ecommerce/util"
 )
 
 type UserRepo interface {
@@ -27,14 +29,21 @@ func NewUserRepo(db *sqlx.DB) UserRepo {
 
 func (r *userRepo) Create(user domain.User) (*domain.User, error) {
 
+	user.Uuid = uuid.New().String()
 	query := `
-		INSERT INTO users(first_name, last_name, email, password, role) VALUES(
-		$1, $2, $3, $4, $5
+		INSERT INTO users(unique_id, first_name, last_name, email, password, role) VALUES(
+		$1, $2, $3, $4, $5, &6
 		)
 		RETURNING id
 	`
 
-	row := r.db.QueryRow(query, user.FirstName, user.LastName, user.Email, user.Password, user.Role)
+	user.Password = util.CreateHashPassword(user.Password)
+
+	if user.Role == "" {
+		user.Role = "user"
+	}
+
+	row := r.db.QueryRow(query, user.Uuid, user.FirstName, user.LastName, user.Email, user.Password, user.Role)
 
 	if row.Err() != nil {
 		fmt.Println("err", row.Err())
@@ -50,7 +59,7 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 	var user domain.User
 
 	query := `
-		SELECT id, first_name, last_name, email, password, role
+		SELECT id, unique_id, first_name, last_name, email, password, role
 		FROM users
 		WHERE email = $1 AND password = $2
 		LIMIT 1
