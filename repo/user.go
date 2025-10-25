@@ -73,6 +73,13 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 		}
 		return nil, err
 	}
+
+	ok, err := util.CheckHashedassword(pass, user.Password)
+	if !ok {
+		fmt.Println(err)
+		return nil, err
+	}
+
 	return &user, nil
 }
 
