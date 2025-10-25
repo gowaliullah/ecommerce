@@ -35,22 +35,23 @@ func Serve() {
 		os.Exit(1)
 	}
 
+	// middlewares
+	middlewares := middleware.NewMiddlewares(cnf)
+
 	// repos
 	userRepo := repo.NewUserRepo(dbCon)
 	productRepo := repo.NewProductRepo(*dbCon)
 	categoryRepo := repo.NewCategoryRepo(*dbCon)
 	cartRepo := repo.NewCartRepo(*dbCon)
 
-	// domains
+	// services
 	userSrc := user.NewService(userRepo)
 	productSrc := product.NewService(productRepo)
 	categorySrc := category.NewService(categoryRepo)
 	cartSrc := cart.NewService(cartRepo)
 
-	middlewares := middleware.NewMiddlewares(cnf)
-
 	// handlers
-	usrHnadler := userHandler.NewHandler(cnf, userSrc)
+	usrHnadler := userHandler.NewHandler(middlewares, cnf, userSrc)
 	catHandler := categoryHandler.NewHandler(middlewares, categorySrc)
 	productHdl := productHandler.NewHandler(middlewares, productSrc)
 	cartHdl := cartHandler.NewHandler(middlewares, cartSrc)
