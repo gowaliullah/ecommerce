@@ -20,7 +20,6 @@ type DBConfig struct {
 	User          string
 	Password      string
 	EnableSSLMODE bool
-	Auth_ctx_key  context_key
 }
 
 type Config struct {
@@ -28,6 +27,7 @@ type Config struct {
 	ServiceName  string
 	HttpPort     int
 	JwtSecretKey string
+	Auth_ctx_key context_key
 	DB           *DBConfig
 }
 
