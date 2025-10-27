@@ -12,9 +12,9 @@ type Service interface {
 type UserRepo interface {
 	Create(u domain.User) (*domain.User, error)
 	Find(email, pass string) (*domain.User, error)
-	Get(id int) (*domain.User, error)
-	List() ([]*domain.User, error)
+	Get(id string) (*domain.User, error)
+	List(limit, page int) ([]*domain.User, error)
 	Count() (int64, error)
 	Update(u domain.User) (*domain.User, error)
-	Delete(id int) error
+	Delete(id string) error
 }

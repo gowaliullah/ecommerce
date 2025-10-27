@@ -47,11 +47,15 @@ func (svc *service) Count() (int64, error) {
 	return svc.usrRepo.Count()
 }
 
-func (svc *service) List() ([]*domain.User, error) {
-	return svc.usrRepo.List()
+func (svc *service) List(limit, page int) ([]*domain.User, error) {
+	users, err := svc.usrRepo.List(limit, page)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
-func (svc *service) Get(id int) (*domain.User, error) {
+func (svc *service) Get(id string) (*domain.User, error) {
 	return svc.usrRepo.Get(id)
 }
 
@@ -59,6 +63,6 @@ func (svc *service) Update(u domain.User) (*domain.User, error) {
 	return svc.usrRepo.Update(u)
 }
 
-func (svc *service) Delete(id int) error {
+func (svc *service) Delete(id string) error {
 	return svc.usrRepo.Delete(id)
 }

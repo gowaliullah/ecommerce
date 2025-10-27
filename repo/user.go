@@ -61,8 +61,7 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 	query := `
 		SELECT id, unique_id, first_name, last_name, email, password, role
 		FROM users
-		WHERE email =$1
-		LIMIT 1
+		WHERE email = $1
 	`
 
 	err := r.db.Get(&user, query, email)
@@ -73,6 +72,7 @@ func (r *userRepo) Find(email, pass string) (*domain.User, error) {
 		return nil, err
 	}
 
+	// checking the password
 	ok, err := util.CheckHashedassword(pass, user.Password)
 	if !ok {
 		return nil, err
@@ -96,12 +96,22 @@ func (r *userRepo) Count() (int64, error) {
 
 }
 
-func (r *userRepo) List() ([]*domain.User, error) {
-	query := `SELECT id, unique_id, first_name, last_name, email, password, role FROM users`
+func (r *userRepo) List(limit, page int) ([]*domain.User, error) {
+
+	if limit <= 0 || limit >= 100 {
+		limit = 10
+	}
+	if page <= 0 {
+		page = 1
+	}
+
+	offset := (page - 1) * limit
 
 	var users []*domain.User
 
-	err := r.db.Select(&users, query)
+	query := `SELECT id, unique_id, first_name, last_name, email, role, created_at, updated_at FROM users LIMITS $1 OFSET $2`
+
+	err := r.db.Select(&users, query, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -109,18 +119,22 @@ func (r *userRepo) List() ([]*domain.User, error) {
 	return users, nil
 }
 
-func (r *userRepo) Get(id int) (*domain.User, error) {
-	query := `SELECT id, unique_id, first_name, last_name, email, password, role FROM users WHERE id = $1`
+func (r *userRepo) Get(id string) (*domain.User, error) {
 
 	var usr domain.User
 
-	err := r.db.Get(&usr, query, id)
-	if err != nil {
-		return nil, err
-	}
+	query := `SELECT * FROM users WHERE id = $1`
+
+	row := r.db.QueryRow(query, id)
+	row.Scan(&usr)
 
 	return &usr, nil
 
+	// query := `SELECT id, unique_id, first_name, last_name, email, password, role FROM users WHERE id = $1`
+	// err := r.db.Get(&usr, query, id)
+	// if err != nil {
+	// 	return nil, err
+	// }
 }
 
 func (r *userRepo) Update(u domain.User) (*domain.User, error) {
@@ -141,7 +155,7 @@ func (r *userRepo) Update(u domain.User) (*domain.User, error) {
 	return &u, nil
 }
 
-func (r *userRepo) Delete(id int) error {
+func (r *userRepo) Delete(id string) error {
 	query := `DELETE FROM users WHERE id = $1`
 
 	_, err := r.db.Exec(query, id)

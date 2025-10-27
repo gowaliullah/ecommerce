@@ -131,7 +131,6 @@ func loadConfig() {
 		User:          dbUser,
 		Password:      dbPassword,
 		EnableSSLMODE: enblSSMode,
-		Auth_ctx_key:  context_key(auth_ctx_key),
 	}
 
 	config = &Config{
@@ -139,6 +138,7 @@ func loadConfig() {
 		ServiceName:  serviceName,
 		HttpPort:     httpInt,
 		JwtSecretKey: jwtSecretKey,
+		Auth_ctx_key: context_key(auth_ctx_key),
 		DB:           dbConfig,
 	}
 
