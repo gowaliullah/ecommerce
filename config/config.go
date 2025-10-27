@@ -11,6 +11,8 @@ import (
 
 var config *Config
 
+type context_key string
+
 type DBConfig struct {
 	Host          string
 	Port          int
@@ -18,6 +20,7 @@ type DBConfig struct {
 	User          string
 	Password      string
 	EnableSSLMODE bool
+	Auth_ctx_key  context_key
 }
 
 type Config struct {
@@ -108,6 +111,12 @@ func loadConfig() {
 		os.Exit(1)
 	}
 
+	auth_ctx_key := os.Getenv("AUTH_CONTEXT_KEY")
+	if auth_ctx_key == "" {
+		log.Fatal("auth ctx key is required")
+		os.Exit(1)
+	}
+
 	enableSslMode := os.Getenv("DB_ENABLE_SSL_MODE")
 	enblSSMode, err := strconv.ParseBool(enableSslMode)
 	if err != nil {
@@ -122,6 +131,7 @@ func loadConfig() {
 		User:          dbUser,
 		Password:      dbPassword,
 		EnableSSLMODE: enblSSMode,
+		Auth_ctx_key:  context_key(auth_ctx_key),
 	}
 
 	config = &Config{
