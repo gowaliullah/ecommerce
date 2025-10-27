@@ -109,7 +109,7 @@ func (r *userRepo) List(limit, page int) ([]*domain.User, error) {
 
 	var users []*domain.User
 
-	query := `SELECT id, unique_id, first_name, last_name, email, role, created_at, updated_at FROM users LIMITS $1 OFSET $2`
+	query := `SELECT id, unique_id, first_name, last_name, email, role, created_at, updated_at FROM users LIMIT $1 OFFSET $2`
 
 	err := r.db.Select(&users, query, limit, offset)
 	if err != nil {
@@ -123,18 +123,12 @@ func (r *userRepo) Get(id string) (*domain.User, error) {
 
 	var usr domain.User
 
-	query := `SELECT * FROM users WHERE id = $1`
-
-	row := r.db.QueryRow(query, id)
-	row.Scan(&usr)
-
+	query := `SELECT id, unique_id, first_name, last_name, email, password, role FROM users WHERE id = $1`
+	err := r.db.Get(&usr, query, id)
+	if err != nil {
+		return nil, err
+	}
 	return &usr, nil
-
-	// query := `SELECT id, unique_id, first_name, last_name, email, password, role FROM users WHERE id = $1`
-	// err := r.db.Get(&usr, query, id)
-	// if err != nil {
-	// 	return nil, err
-	// }
 }
 
 func (r *userRepo) Update(u domain.User) (*domain.User, error) {

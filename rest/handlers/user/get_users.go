@@ -19,7 +19,7 @@ func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 		limit = 10
 	}
 
-	users, err := h.svc.List(page, limit)
+	users, err := h.svc.List(limit, page)
 	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, err.Error())
 		return
