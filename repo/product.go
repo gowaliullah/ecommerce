@@ -1,6 +1,9 @@
 package repo
 
 import (
+	"fmt"
+
+	"github.com/google/uuid"
 	"github.com/gowalillah/ecommerce/domain"
 	"github.com/gowalillah/ecommerce/product"
 	"github.com/jmoiron/sqlx"
@@ -21,15 +24,16 @@ func NewProductRepo(db sqlx.DB) ProductRepo {
 }
 
 func (r *productRepo) Create(p domain.Product) (*domain.Product, error) {
+	p.Uuid = uuid.New().String()
 	query := `
 		INSERT INTO products (
-			title, description, price, stock, img_url, created_by 
+			unique_id, title, description, price, stock, img_url, created_by 
 		) VALUES (
-		 	$1, $2, $3, $4, $5, $6
+		 	$1, $2, $3, $4, $5, $6, $7
 		) RETURNING id
 	`
 
-	row := r.db.QueryRow(query, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl, p.CreatedBy)
+	row := r.db.QueryRow(query, p.Uuid, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl, p.CreatedBy)
 
 	err := row.Scan(&p.ID)
 	if err != nil {
@@ -56,7 +60,7 @@ func (r *productRepo) Count() (int64, error) {
 
 func (r *productRepo) List() ([]*domain.Product, error) {
 
-	query := `SELECT id, title, description, price, stock, img_url, created_by FROM products`
+	query := `SELECT id, unique_id, title, description, price, stock, img_url, created_by FROM products`
 
 	var products []*domain.Product
 
@@ -69,12 +73,27 @@ func (r *productRepo) List() ([]*domain.Product, error) {
 }
 
 func (r *productRepo) Get(id int) (*domain.Product, error) {
-	query := `SELECT id, title, description, price, stock, img_url, created_by FROM products WHERE id = $1`
+	const query = `
+        SELECT
+            p.id,
+            p.unique_id,
+            p.title,
+            p.description,
+            p.price,
+            p.stock,
+            p.img_url,
+            p.created_by,
+            u.first_name || ' ' || u.last_name AS creator_name,
+            u.email                         AS creator_email
+        FROM products p
+        LEFT JOIN users u ON p.created_by = u.unique_id
+        WHERE p.id = $1
+    `
 
 	var prd domain.Product
-
 	err := r.db.Get(&prd, query, id)
 	if err != nil {
+		fmt.Printf("Get product error (id=%d): %v\n", id, err)
 		return nil, err
 	}
 

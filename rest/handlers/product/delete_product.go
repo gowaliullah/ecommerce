@@ -21,10 +21,12 @@ func (h *Handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 
 	err = h.svc.Delete(id)
 	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		http.Error(w, "fail to deleted product", http.StatusInternalServerError)
 		return
 	}
 
-	util.SendData(w, http.StatusOK, "Successfully deleted product")
+	util.SendData(w, http.StatusOK, sendRes{
+		Message: "Product successfully deleted......",
+	})
 
 }

@@ -15,9 +15,9 @@ func (h *Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	product, _ := h.svc.Get(id)
+	product, err := h.svc.Get(id)
 	if product == nil {
-		util.SendError(w, http.StatusNotFound, "Product not found")
+		util.SendError(w, http.StatusNotFound, err.Error())
 		return
 	}
 	util.SendData(w, http.StatusOK, product)

@@ -40,8 +40,11 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(usr.Uuid)
+
 	accessToken, err := util.CreateJWT(h.cnf.JwtSecretKey, util.Payload{
 		ID:        usr.ID,
+		Uuid:      usr.Uuid,
 		FirstName: usr.FirstName,
 		LastName:  usr.LastName,
 		Email:     usr.Email,

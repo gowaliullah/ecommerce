@@ -14,7 +14,7 @@ type ReqCreatedProduct struct {
 	Price       float64 `json:"price"`
 	Stock       int     `json:"stock"`
 	ImgUrl      string  `json:"img_url"`
-	CreatedBy   string  `json:"Created_by"`
+	CreatedBy   string  `json:"created_by"`
 }
 
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
