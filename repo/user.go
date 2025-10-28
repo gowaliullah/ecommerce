@@ -138,15 +138,23 @@ func (r *userRepo) Update(u domain.User) (*domain.User, error) {
 			last_name = $2, 
 			email = $3, 
 			password = $4, 
-			role = $5
 		WHERE id = $6
 	`
-	_, err := r.db.Exec(query, u.FirstName, u.LastName, u.Email, u.Password, u.Role, u.Role)
+	_, err := r.db.Exec(query, u.FirstName, u.LastName, u.Email, u.Password, u.Role)
 	if err != nil {
 		return nil, err
 	}
 
 	return &u, nil
+}
+
+func (r *userRepo) UpdateRole(id int, newRole string) error {
+	query := `
+		UPDATE users SET role = $1
+		WHERE id = $2
+	`
+	_, err := r.db.Exec(query, newRole, id)
+	return err
 }
 
 func (r *userRepo) Delete(id string) error {

@@ -63,6 +63,10 @@ func (svc *service) Update(u domain.User) (*domain.User, error) {
 	return svc.usrRepo.Update(u)
 }
 
+func (svc *service) UpdateRole(id int, newRole string) error {
+	return svc.usrRepo.UpdateRole(id, newRole)
+}
+
 func (svc *service) Delete(id string) error {
 	return svc.usrRepo.Delete(id)
 }

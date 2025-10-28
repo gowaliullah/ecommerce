@@ -16,5 +16,6 @@ type UserRepo interface {
 	List(limit, page int) ([]*domain.User, error)
 	Count() (int64, error)
 	Update(u domain.User) (*domain.User, error)
+	UpdateRole(id int, newRole string) error
 	Delete(id string) error
 }

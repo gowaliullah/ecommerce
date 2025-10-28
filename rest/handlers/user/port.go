@@ -8,5 +8,6 @@ type Service interface {
 	List(limit, page int) ([]*domain.User, error)
 	Get(id string) (*domain.User, error)
 	Update(user domain.User) (*domain.User, error)
+	UpdateRole(id int, newRole string) error
 	Delete(id string) error
 }

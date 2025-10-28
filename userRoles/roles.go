@@ -1,7 +1,8 @@
 package userRoles
 
 const (
-	Admin  = "admin"
-	Seller = "seller"
-	User   = "user"
+	SuperAdmin = "super-admin"
+	Admin      = "admin"
+	Seller     = "seller"
+	User       = "user"
 )
