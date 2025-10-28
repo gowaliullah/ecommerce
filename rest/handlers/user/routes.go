@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gowalillah/ecommerce/rest/middleware"
+	"github.com/gowalillah/ecommerce/userRoles"
 )
 
 func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
@@ -31,7 +32,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager
 			http.HandlerFunc(
 				h.GetUsers,
 			),
-			h.middleware.AuthenticateJwt,
+			h.middleware.AuthenticateJwt(userRoles.Admin),
 		),
 	)
 

@@ -14,6 +14,7 @@ type ReqCreatedProduct struct {
 	Price       float64 `json:"price"`
 	Stock       int     `json:"stock"`
 	ImgUrl      string  `json:"img_url"`
+	CreatedBy   string  `json:"Created_by"`
 }
 
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
@@ -27,16 +28,7 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usr, ok := util.GetUserFromContext(r, *h.cnf)
-
-	if !ok {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	if usr.Role != "admin" {
-		http.Error(w, "Forbidden", http.StatusForbidden)
-	}
+	usr, _ := util.GetUserFromContext(r, h.cnf)
 
 	createdProduct, err := h.svc.Create(domain.Product{
 		Title:       req.Title,
@@ -44,6 +36,7 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		Price:       req.Price,
 		Stock:       req.Stock,
 		ImgUrl:      req.ImgUrl,
+		CreatedBy:   usr.Uuid,
 	})
 
 	if err != nil {

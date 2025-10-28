@@ -12,7 +12,7 @@ CREATE TABLE products (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
+ 
 DROP TABLE products;
 
 

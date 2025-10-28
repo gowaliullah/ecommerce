@@ -30,6 +30,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager
 			http.HandlerFunc(
 				h.CreateProduct,
 			),
+			h.middlewares.AuthenticateJwt("admin"),
 		),
 	)
 

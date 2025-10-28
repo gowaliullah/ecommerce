@@ -16,6 +16,7 @@ type Header struct {
 
 type Payload struct {
 	ID        int    `json:"id" db:"id"`
+	Uuid      string `json:"unique_id" db:"unique_id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`

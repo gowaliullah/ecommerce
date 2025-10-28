@@ -4,11 +4,13 @@ import "time"
 
 type Product struct {
 	ID          int     `json:"id" db:"id"`
+	Uuid        string  `json:"unique_id" db:"unique_id" validate:"required,unique"`
 	Title       string  `json:"title" db:"title"`
 	Description string  `json:"description" db:"description"`
 	Price       float64 `json:"price" db:"price"`
 	Stock       int     `json:"stock" db:"stock"`
 	ImgUrl      string  `json:"img_url" db:"img_url"`
+	CreatedBy   string  `json:"Created_by" db:"Created_by"`
 	// CategoryID  *int      `json:"category_id,omitempty" db:"category_id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`

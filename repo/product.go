@@ -23,13 +23,13 @@ func NewProductRepo(db sqlx.DB) ProductRepo {
 func (r *productRepo) Create(p domain.Product) (*domain.Product, error) {
 	query := `
 		INSERT INTO products (
-			title, description, price, stock, img_url
+			title, description, price, stock, img_url, created_by 
 		) VALUES (
-		 	$1, $2, $3, $4, $5
+		 	$1, $2, $3, $4, $5, $6
 		) RETURNING id
 	`
 
-	row := r.db.QueryRow(query, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl)
+	row := r.db.QueryRow(query, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl, p.CreatedBy)
 
 	err := row.Scan(&p.ID)
 	if err != nil {
@@ -56,7 +56,7 @@ func (r *productRepo) Count() (int64, error) {
 
 func (r *productRepo) List() ([]*domain.Product, error) {
 
-	query := `SELECT id, title, description, price, stock, img_url FROM products`
+	query := `SELECT id, title, description, price, stock, img_url, created_by FROM products`
 
 	var products []*domain.Product
 
@@ -69,7 +69,7 @@ func (r *productRepo) List() ([]*domain.Product, error) {
 }
 
 func (r *productRepo) Get(id int) (*domain.Product, error) {
-	query := `SELECT id, title, description, price, stock, img_url FROM products WHERE id = $1`
+	query := `SELECT id, title, description, price, stock, img_url, created_by FROM products WHERE id = $1`
 
 	var prd domain.Product
 
