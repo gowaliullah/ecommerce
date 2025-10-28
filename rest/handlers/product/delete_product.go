@@ -7,6 +7,10 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
+type sendRes struct {
+	Message string `json:"message"`
+}
+
 func (h *Handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	productId := r.PathValue("id")
 	id, err := strconv.Atoi(productId)

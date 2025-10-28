@@ -23,8 +23,19 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&req)
 	if err != nil {
-		http.Error(w, "Provide valid JSON data", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
+	}
+
+	usr, ok := util.GetUserFromContext(r, *h.cnf)
+
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	if usr.Role != "admin" {
+		http.Error(w, "Forbidden", http.StatusForbidden)
 	}
 
 	createdProduct, err := h.svc.Create(domain.Product{
@@ -36,7 +47,7 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		http.Error(w, "Failed to create product", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
