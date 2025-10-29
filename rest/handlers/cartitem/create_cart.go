@@ -9,7 +9,7 @@ import (
 )
 
 func (h *CartItemHandler) CreateCartItem(w http.ResponseWriter, r *http.Request) {
-	var cart domain.Cart
+	var cart domain.CartItem
 
 	err := json.NewDecoder(r.Body).Decode(&cart)
 	if err != nil {
@@ -19,8 +19,11 @@ func (h *CartItemHandler) CreateCartItem(w http.ResponseWriter, r *http.Request)
 
 	usr, _ := util.GetUserFromContext(r, h.cnf)
 
-	createdCart, err := h.svc.Create(domain.Cart{
-		UserID: usr.Uuid,
+	createdCart, err := h.svc.Create(domain.CartItem{
+		Uuid:      usr.Uuid,
+		CartID:    cart.Uuid,
+		ProductID: cart.Uuid,
+		Quantity:  cart.Quantity,
 	})
 
 	if err != nil {

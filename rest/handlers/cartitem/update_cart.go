@@ -17,7 +17,7 @@ func (h *CartItemHandler) UpdateCartItem(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var req domain.Cart
+	var req domain.CartItem
 
 	decoder := json.NewDecoder(r.Body)
 	err = decoder.Decode(&req)
@@ -26,9 +26,12 @@ func (h *CartItemHandler) UpdateCartItem(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	updatedCart, err := h.svc.Update(domain.Cart{
-		ID:     id,
-		UserID: req.Uuid,
+	updatedCart, err := h.svc.Update(domain.CartItem{
+		ID:        id,
+		Uuid:      req.Uuid,
+		CartID:    req.Uuid,
+		ProductID: req.ProductID,
+		Quantity:  req.Quantity,
 	})
 
 	if err != nil {
