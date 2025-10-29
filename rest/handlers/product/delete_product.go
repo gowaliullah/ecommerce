@@ -4,12 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gowalillah/ecommerce/types"
 	"github.com/gowalillah/ecommerce/util"
 )
-
-type sendRes struct {
-	Message string `json:"message"`
-}
 
 func (h *Handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	productId := r.PathValue("id")
@@ -37,7 +34,7 @@ func (h *Handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.SendData(w, http.StatusOK, sendRes{
+	util.SendData(w, http.StatusOK, types.DeleteRes{
 		Message: "Product successfully deleted......",
 	})
 

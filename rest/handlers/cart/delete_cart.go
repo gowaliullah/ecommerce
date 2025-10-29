@@ -4,10 +4,11 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gowalillah/ecommerce/types"
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *Handler) DeleteCart(w http.ResponseWriter, r *http.Request) {
+func (h *CartHandler) DeleteCart(w http.ResponseWriter, r *http.Request) {
 	categoryId := r.PathValue("id")
 	id, err := strconv.Atoi(categoryId)
 	if err != nil {
@@ -20,5 +21,8 @@ func (h *Handler) DeleteCart(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	util.SendData(w, http.StatusOK, "Successfully deleted cart item")
+
+	util.SendData(w, http.StatusOK, types.DeleteRes{
+		Message: "Successfully deleted cart item",
+	})
 }

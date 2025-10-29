@@ -6,7 +6,7 @@ import (
 	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
-func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
+func (h *CartHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
 
 	mux.Handle(
 		"GET /carts",

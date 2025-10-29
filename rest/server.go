@@ -19,7 +19,7 @@ type Server struct {
 	userHandler     *user.Handler
 	categoryHandler *category.Handler
 	productHandler  *product.Handler
-	cartHandler     *cart.Handler
+	cartHandler     *cart.CartHandler
 }
 
 func NewServer(
@@ -27,7 +27,7 @@ func NewServer(
 	userHandler *user.Handler,
 	categoryHandler *category.Handler,
 	productHandler *product.Handler,
-	cartHandler *cart.Handler,
+	cartHandler *cart.CartHandler,
 
 ) *Server {
 	return &Server{

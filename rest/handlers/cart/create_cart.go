@@ -8,7 +8,7 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *Handler) CreateCart(w http.ResponseWriter, r *http.Request) {
+func (h *CartHandler) CreateCart(w http.ResponseWriter, r *http.Request) {
 	var cart domain.Cart
 
 	err := json.NewDecoder(r.Body).Decode(&cart)
@@ -17,8 +17,15 @@ func (h *Handler) CreateCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// usr, ok := util.GetUserFromContext(r, h.cnf)
+
+	// if !ok {
+	// 	util.SendError(w, http.StatusUnauthorized, "Unauthorized")
+	// 	return
+	// }
+
 	createdCart, err := h.svc.Create(domain.Cart{
-		UserID: cart.ID,
+		UserID: cart.Uuid,
 	})
 
 	if err != nil {

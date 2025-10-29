@@ -7,11 +7,11 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *Handler) GetCart(w http.ResponseWriter, r *http.Request) {
+func (h *CartHandler) GetCart(w http.ResponseWriter, r *http.Request) {
 	cartId := r.PathValue("id")
 	id, err := strconv.Atoi(cartId)
 	if err != nil {
-		http.Error(w, "Please give the valid cart id", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 

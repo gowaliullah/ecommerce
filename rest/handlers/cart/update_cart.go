@@ -9,11 +9,11 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *Handler) UpdateCart(w http.ResponseWriter, r *http.Request) {
+func (h *CartHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 	catId := r.PathValue("id")
 	id, err := strconv.Atoi(catId)
 	if err != nil {
-		http.Error(w, "Please give the valid cart id", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -22,17 +22,17 @@ func (h *Handler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err = decoder.Decode(&req)
 	if err != nil {
-		http.Error(w, "Provide valid JSON data", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	updatedCart, err := h.svc.Update(domain.Cart{
 		ID:     id,
-		UserID: req.ID,
+		UserID: req.Uuid,
 	})
 
 	if err != nil {
-		http.Error(w, "Failed to update cart", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 

@@ -54,7 +54,7 @@ func Serve() {
 	usrHnadler := userHandler.NewHandler(middlewares, cnf, userSrc)
 	catHandler := categoryHandler.NewHandler(middlewares, cnf, categorySrc)
 	productHdl := productHandler.NewHandler(middlewares, cnf, productSrc)
-	cartHdl := cartHandler.NewHandler(middlewares, cartSrc)
+	cartHdl := cartHandler.NewCartHandler(middlewares, cnf, cartSrc)
 
 	server := rest.NewServer(cnf, usrHnadler, catHandler, productHdl, cartHdl)
 	server.Start()

@@ -6,10 +6,10 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *Handler) GetCarts(w http.ResponseWriter, r *http.Request) {
+func (h *CartHandler) GetCarts(w http.ResponseWriter, r *http.Request) {
 	carts, err := h.svc.List()
 	if err != nil {
-		util.SendError(w, http.StatusInternalServerError, "Failed to retrieve carts")
+		util.SendError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	util.SendData(w, http.StatusOK, carts)
