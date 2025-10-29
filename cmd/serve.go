@@ -52,7 +52,7 @@ func Serve() {
 
 	// handlers
 	usrHnadler := userHandler.NewHandler(middlewares, cnf, userSrc)
-	catHandler := categoryHandler.NewHandler(middlewares, categorySrc)
+	catHandler := categoryHandler.NewHandler(middlewares, cnf, categorySrc)
 	productHdl := productHandler.NewHandler(middlewares, cnf, productSrc)
 	cartHdl := cartHandler.NewHandler(middlewares, cartSrc)
 

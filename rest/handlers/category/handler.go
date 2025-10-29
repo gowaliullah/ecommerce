@@ -1,15 +1,23 @@
 package category
 
-import "github.com/gowalillah/ecommerce/rest/middleware"
+import (
+	"github.com/gowalillah/ecommerce/config"
+	"github.com/gowalillah/ecommerce/rest/middleware"
+)
 
 type Handler struct {
-	middlewares *middleware.Middlewares
+	middlewares middleware.Middlewares
+	cnf         *config.Config
 	svc         Service
 }
 
-func NewHandler(middlewares *middleware.Middlewares, svc Service) *Handler {
+func NewHandler(
+	middlewares *middleware.Middlewares,
+	cnf *config.Config,
+	svc Service) *Handler {
 	return &Handler{
-		middlewares: middlewares,
+		middlewares: *middlewares,
+		cnf:         cnf,
 		svc:         svc,
 	}
 

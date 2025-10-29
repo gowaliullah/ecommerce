@@ -40,7 +40,7 @@ func (r *categoryRepo) Create(c domain.Category) (*domain.Category, error) {
 }
 
 func (r *categoryRepo) List() ([]*domain.Category, error) {
-	query := `SELECT id, name, image_url`
+	query := `SELECT id, unique_id, name, slug FROM categories`
 
 	var categories []*domain.Category
 
@@ -55,7 +55,7 @@ func (r *categoryRepo) List() ([]*domain.Category, error) {
 
 func (r *categoryRepo) Get(id int) (*domain.Category, error) {
 	query := `
-		SELECT id, name, image_url WHERE id = $1
+		SELECT id, unique_id, name, slug FROM categories WHERE id = $1
  	`
 	var c domain.Category
 
@@ -69,7 +69,7 @@ func (r *categoryRepo) Get(id int) (*domain.Category, error) {
 
 func (r *categoryRepo) Update(c domain.Category) (*domain.Category, error) {
 	query := `
-		UPDATE categories SET 
+		UPDATE categories SET
 		name = $1,
 		slug = $2
 	WHERE id = $3

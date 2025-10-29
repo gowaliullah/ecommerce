@@ -10,19 +10,20 @@ import (
 )
 
 func (h *Handler) UpdateCategory(w http.ResponseWriter, r *http.Request) {
+
 	catId := r.PathValue("id")
 	id, err := strconv.Atoi(catId)
 	if err != nil {
-		http.Error(w, "Please give the valid category id", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	var req domain.Category
+	var req ReqCreatedCategory
 
 	decoder := json.NewDecoder(r.Body)
 	err = decoder.Decode(&req)
 	if err != nil {
-		http.Error(w, "Provide valid JSON data", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -33,7 +34,7 @@ func (h *Handler) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		http.Error(w, "Failed to update category", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 

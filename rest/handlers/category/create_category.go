@@ -8,14 +8,33 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
+type ReqCreatedCategory struct {
+	Name string `json:"name"`
+	Slug string `json:"slug"`
+}
+
 func (h *Handler) CreateCategory(w http.ResponseWriter, r *http.Request) {
-	var data domain.Category
+	var data ReqCreatedCategory
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	// usr, ok := util.GetUserFromContext(r, h.cnf)
+
+	// fmt.Println(usr)
+
+	// if !ok {
+	// 	util.SendError(w, http.StatusUnauthorized, "Unauthorized")
+	// 	return
+	// }
+
+	// if usr.Role != "seller" && usr.Role != "admin" {
+	// 	util.SendError(w, http.StatusForbidden, "Forbidden: seller role required")
+	// 	return
+	// }
 
 	createdCategory, err := h.svc.Create(domain.Category{
 		Name: data.Name,

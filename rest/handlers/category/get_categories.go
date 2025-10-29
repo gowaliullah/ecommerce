@@ -9,7 +9,7 @@ import (
 func (h *Handler) GetCategories(w http.ResponseWriter, r *http.Request) {
 	categories, err := h.svc.List()
 	if err != nil {
-		util.SendError(w, http.StatusInternalServerError, "Failed to retrieve categories")
+		util.SendError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	util.SendData(w, http.StatusOK, categories)
