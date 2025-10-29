@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"github.com/google/uuid"
 	"github.com/gowalillah/ecommerce/category"
 	"github.com/gowalillah/ecommerce/domain"
 	"github.com/jmoiron/sqlx"
@@ -21,14 +22,15 @@ func NewCategoryRepo(db sqlx.DB) CategoryRepo {
 }
 
 func (r *categoryRepo) Create(c domain.Category) (*domain.Category, error) {
+	c.Uuid = uuid.New().String()
 	query := `
 		INSERT INTO categories (
-			name image_url
+			unique_id, name, slug
 		) VALUES (
-			$1, $2 
+			$1, $2, $3
 		) RETURNING id
 	`
-	row := r.db.QueryRow(query, c.Name, c.ImageUrl)
+	row := r.db.QueryRow(query, c.Uuid, c.Name, c.Slug)
 	err := row.Scan(&c.ID)
 	if err != nil {
 		return nil, err
@@ -69,10 +71,10 @@ func (r *categoryRepo) Update(c domain.Category) (*domain.Category, error) {
 	query := `
 		UPDATE categories SET 
 		name = $1,
-		image_url = $2
+		slug = $2
 	WHERE id = $3
 	`
-	_, err := r.db.Exec(query, c.Name, c.ImageUrl)
+	_, err := r.db.Exec(query, c.Name, c.Slug, c.ID)
 	if err != nil {
 		return nil, err
 	}

@@ -1,10 +1,10 @@
 -- Active: 1755325089603@@127.0.0.1@5432@ecommerce
 -- +migrate Up
 
-CREATE TABLE IF NOT EXISTS categories (
+CREATE TABLE IF NOT EXISTS categories ( 
     id SERIAL PRIMARY KEY,
     unique_id UUID DEFAULT gen_random_uuid() UNIQUE, 
-    name VARCHAR(100), 
+    name VARCHAR(100),  
     slug VARCHAR(120) UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

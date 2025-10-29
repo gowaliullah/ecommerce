@@ -27,9 +27,9 @@ func (h *Handler) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	updatedCategory, err := h.svc.Update(domain.Category{
-		ID:       id,
-		Name:     req.Name,
-		ImageUrl: req.ImageUrl,
+		ID:   id,
+		Name: req.Name,
+		Slug: req.Slug,
 	})
 
 	if err != nil {
