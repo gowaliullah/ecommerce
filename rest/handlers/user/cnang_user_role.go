@@ -17,6 +17,18 @@ func (h *Handler) ChangeUserRole(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usr, ok := util.GetUserFromContext(r, h.cnf)
+
+	if !ok {
+		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	if usr.Role != "super-admin" {
+		util.SendError(w, http.StatusForbidden, "Forbidden: super-admin role required")
+		return
+	}
+
 	if err := h.svc.UpdateRole(req.ID, req.NewRole); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

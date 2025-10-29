@@ -8,7 +8,48 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (m *Middlewares) AuthenticateJwt(allowedRoles ...string) func(http.Handler) http.Handler {
+func (m *Middlewares) Authentication(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		AuthenticationHeader := r.Header.Get("Authorization")
+		if AuthenticationHeader == "" {
+			http.Error(w, "Unauthorized:", http.StatusUnauthorized)
+			return
+		}
+
+		//split header and grep the token
+		headerArr := strings.Split(AuthenticationHeader, " ")
+		if len(headerArr) != 2 {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		jwt_token := headerArr[1]
+
+		// verify token
+		isVerified, err := util.Verify(jwt_token, m.cnf.JwtSecretKey)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+
+		if !isVerified {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		user, err := util.DecodeToken(jwt_token, m.cnf.JwtSecretKey)
+		if err != nil {
+			util.SendError(w, http.StatusInternalServerError, "failed to verify")
+		}
+
+		ctx := context.WithValue(r.Context(), m.cnf.Auth_ctx_key, user)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func (m *Middlewares) AuthenticateJwt33(allowedRoles ...string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

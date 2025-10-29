@@ -19,6 +19,18 @@ func (h *Handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usr, ok := util.GetUserFromContext(r, h.cnf)
+
+	if !ok {
+		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	if usr.Role != "seller" {
+		util.SendError(w, http.StatusForbidden, "Forbidden: seller role required")
+		return
+	}
+
 	err = h.svc.Delete(id)
 	if err != nil {
 		http.Error(w, "fail to deleted product", http.StatusInternalServerError)

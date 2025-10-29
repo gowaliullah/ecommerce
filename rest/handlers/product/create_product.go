@@ -2,6 +2,7 @@ package product
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gowalillah/ecommerce/domain"
@@ -28,7 +29,20 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usr, _ := util.GetUserFromContext(r, h.cnf)
+	usr, ok := util.GetUserFromContext(r, h.cnf)
+	fmt.Println(usr, ok)
+
+	if !ok {
+		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	if usr.Role != "seller" {
+		util.SendError(w, http.StatusForbidden, "Forbidden: seller role required")
+		return
+	}
+
+	fmt.Println("All its okay")
 
 	createdProduct, err := h.svc.Create(domain.Product{
 		Title:       req.Title,
