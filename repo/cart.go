@@ -23,12 +23,13 @@ func NewCartRepo(db sqlx.DB) CartRepo {
 func (r *cartRepo) Create(c domain.Cart) (*domain.Cart, error) {
 	query := `
 		INSERT INTO carts (
+			unique_id,
 			user_id
 		) VALUES (
-			$1
+			$1, $2
 		) RETURNING id
 	`
-	row := r.db.QueryRow(query, c.UserID)
+	row := r.db.QueryRow(query, c.Uuid, c.UserID)
 	err := row.Scan(&c.ID)
 	if err != nil {
 		return nil, err
@@ -38,7 +39,7 @@ func (r *cartRepo) Create(c domain.Cart) (*domain.Cart, error) {
 }
 
 func (r *cartRepo) List() ([]*domain.Cart, error) {
-	query := `SELECT id, user_id`
+	query := `SELECT id, unique_id, user_id`
 
 	var carts []*domain.Cart
 
@@ -53,7 +54,7 @@ func (r *cartRepo) List() ([]*domain.Cart, error) {
 
 func (r *cartRepo) Get(id int) (*domain.Cart, error) {
 	query := `
-		SELECT id, user_id WHERE id = $1
+		SELECT id, unique_id, user_id WHERE id = $1
  	`
 	var c domain.Cart
 
