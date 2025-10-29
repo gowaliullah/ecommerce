@@ -25,15 +25,16 @@ func NewProductRepo(db sqlx.DB) ProductRepo {
 
 func (r *productRepo) Create(p domain.Product) (*domain.Product, error) {
 	p.Uuid = uuid.New().String()
+
 	query := `
 		INSERT INTO products (
-			unique_id, title, description, price, stock, img_url, created_by 
+			unique_id, title, description, price, stock, img_url, created_by, category_id
 		) VALUES (
-		 	$1, $2, $3, $4, $5, $6, $7
+		 	$1, $2, $3, $4, $5, $6, $7, $8
 		) RETURNING id
 	`
 
-	row := r.db.QueryRow(query, p.Uuid, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl, p.CreatedBy)
+	row := r.db.QueryRow(query, p.Uuid, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl, p.CreatedBy, p.CategoryID)
 
 	err := row.Scan(&p.ID)
 	if err != nil {
@@ -60,7 +61,7 @@ func (r *productRepo) Count() (int64, error) {
 
 func (r *productRepo) List() ([]*domain.Product, error) {
 
-	query := `SELECT id, unique_id, title, description, price, stock, img_url, created_by FROM products`
+	query := `SELECT id, unique_id, title, description, price, stock, img_url, created_by, category_id FROM products`
 
 	var products []*domain.Product
 
@@ -83,6 +84,8 @@ func (r *productRepo) Get(id int) (*domain.Product, error) {
             p.stock,
             p.img_url,
             p.created_by,
+			p.category_id,
+			p.category_id,
             u.first_name || ' ' || u.last_name AS creator_name,
             u.email                         AS creator_email
         FROM products p
@@ -107,11 +110,12 @@ func (r *productRepo) Update(p domain.Product) (*domain.Product, error) {
 			description = $2,
 			price = $3,
 			stock = $4,
-			img_url = $5
-		WHERE id = $6
+			img_url = $5,
+			category_id = $6
+		WHERE id = $7
 	`
 
-	_, err := r.db.Exec(query, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl, p.ID)
+	_, err := r.db.Exec(query, p.Title, p.Description, p.Price, p.Stock, p.ImgUrl, p.CategoryID, p.ID)
 	if err != nil {
 		return nil, err
 	}

@@ -2,7 +2,7 @@
 -- +migrate Up
 
 CREATE TABLE IF NOT EXISTS categories ( 
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY, 
     unique_id UUID DEFAULT gen_random_uuid() UNIQUE, 
     name VARCHAR(100),  
     slug VARCHAR(120) UNIQUE,

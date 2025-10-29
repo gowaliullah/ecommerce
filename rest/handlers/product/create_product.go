@@ -2,7 +2,6 @@ package product
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gowalillah/ecommerce/domain"
@@ -16,6 +15,7 @@ type ReqCreatedProduct struct {
 	Stock       int     `json:"stock"`
 	ImgUrl      string  `json:"img_url"`
 	CreatedBy   string  `json:"created_by"`
+	CategoryId  string  `json:"category_id"`
 }
 
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +30,6 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	usr, ok := util.GetUserFromContext(r, h.cnf)
-	fmt.Println(usr, ok)
 
 	if !ok {
 		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
@@ -42,7 +41,12 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("All its okay")
+	// var catId *string
+	// if req.CategoryId != "" {
+	// 	catId = &req.CategoryId
+	// } else {
+	// 	catId = nil
+	// }
 
 	createdProduct, err := h.svc.Create(domain.Product{
 		Title:       req.Title,
@@ -51,6 +55,7 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		Stock:       req.Stock,
 		ImgUrl:      req.ImgUrl,
 		CreatedBy:   usr.Uuid,
+		CategoryID:  &req.CategoryId,
 	})
 
 	if err != nil {

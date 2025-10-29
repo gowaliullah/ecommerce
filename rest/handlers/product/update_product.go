@@ -34,6 +34,7 @@ func (h *Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 		Price:       req.Price,
 		Stock:       req.Stock,
 		ImgUrl:      req.ImgUrl,
+		CategoryID:  &req.CategoryId,
 	})
 
 	if err != nil {

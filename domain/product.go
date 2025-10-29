@@ -3,19 +3,17 @@ package domain
 import "time"
 
 type Product struct {
-	ID          int     `json:"id" db:"id"`
-	Uuid        string  `json:"unique_id" db:"unique_id" validate:"required,unique"`
-	Title       string  `json:"title" db:"title"`
-	Description string  `json:"description" db:"description"`
-	Price       float64 `json:"price" db:"price"`
-	Stock       int     `json:"stock" db:"stock"`
-	ImgUrl      string  `json:"img_url" db:"img_url"`
-	CreatedBy   string  `json:"created_by" db:"created_by"`
-	// CategoryID  *int      `json:"category_id,omitempty" db:"category_id"`
+	ID           int       `json:"id" db:"id"`
+	Uuid         string    `json:"unique_id" db:"unique_id" validate:"required,unique"`
+	Title        string    `json:"title" db:"title"`
+	Description  string    `json:"description" db:"description"`
+	Price        float64   `json:"price" db:"price"`
+	Stock        int       `json:"stock" db:"stock"`
+	ImgUrl       string    `json:"img_url" db:"img_url"`
+	CreatedBy    string    `json:"created_by" db:"created_by"`
+	CategoryID   *string   `json:"category_id,omitempty" db:"category_id"`
 	CreatedAt    time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at" db:"updated_at"`
 	CreatorName  string    `db:"creator_name"`  // first_name + last_name
 	CreatorEmail string    `db:"creator_email"` // from users.email
 }
-
-// Available   int       `json:"available" db:"available"`
