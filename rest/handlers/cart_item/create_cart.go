@@ -1,4 +1,4 @@
-package cart
+package cartitem
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *CartHandler) CreateCart(w http.ResponseWriter, r *http.Request) {
+func (h *CartItemHandler) CreateCartItem(w http.ResponseWriter, r *http.Request) {
 	var cart domain.Cart
 
 	err := json.NewDecoder(r.Body).Decode(&cart)

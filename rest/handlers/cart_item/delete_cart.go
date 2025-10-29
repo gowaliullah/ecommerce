@@ -1,4 +1,4 @@
-package cart
+package cartitem
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *CartHandler) DeleteCart(w http.ResponseWriter, r *http.Request) {
+func (h *CartItemHandler) DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 	categoryId := r.PathValue("id")
 	id, err := strconv.Atoi(categoryId)
 	if err != nil {
