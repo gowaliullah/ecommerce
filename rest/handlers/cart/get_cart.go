@@ -15,9 +15,10 @@ func (h *CartHandler) GetCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cart, _ := h.svc.Get(id)
-	if cart == nil {
-		util.SendError(w, http.StatusNotFound, "cart not found")
+	cart, err := h.svc.Get(id)
+	if err != nil {
+		util.SendError(w, http.StatusNotFound, err.Error())
+		return
 	}
 
 	util.SendData(w, http.StatusOK, cart)

@@ -23,6 +23,6 @@ func (h *CartHandler) DeleteCart(w http.ResponseWriter, r *http.Request) {
 	}
 
 	util.SendData(w, http.StatusOK, types.DeleteRes{
-		Message: "Successfully deleted cart item",
+		Message: "Successfully deleted cart",
 	})
 }

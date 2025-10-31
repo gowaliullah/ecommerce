@@ -9,7 +9,7 @@ import (
 func (h *CartHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
 
 	mux.Handle(
-		"GET /carts",
+		"POST /carts",
 		manager.With(
 			http.HandlerFunc(
 				h.CreateCart),
@@ -25,7 +25,7 @@ func (h *CartHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Man
 	)
 
 	mux.Handle(
-		"POST /carts",
+		"GET /carts",
 		manager.With(
 			http.HandlerFunc(
 				h.GetCarts,

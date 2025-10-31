@@ -27,8 +27,10 @@ func (h *CartHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 	}
 
 	updatedCart, err := h.svc.Update(domain.Cart{
-		ID:     id,
-		UserID: req.Uuid,
+		ID:        id,
+		UserID:    req.UserID,
+		ProductID: req.ProductID,
+		Quantity:  req.Quantity,
 	})
 
 	if err != nil {

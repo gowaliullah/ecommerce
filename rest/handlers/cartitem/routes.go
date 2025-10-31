@@ -9,7 +9,7 @@ import (
 func (h *CartItemHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
 
 	mux.Handle(
-		"GET /carts",
+		"GET /cart-items",
 		manager.With(
 			http.HandlerFunc(
 				h.CreateCartItem),
@@ -17,7 +17,7 @@ func (h *CartItemHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware
 	)
 
 	mux.Handle(
-		"GET /carts/{id}",
+		"GET /cart-items/{id}",
 		manager.With(
 			http.HandlerFunc(
 				h.GetCartItem),
@@ -25,7 +25,7 @@ func (h *CartItemHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware
 	)
 
 	mux.Handle(
-		"POST /carts",
+		"POST /cart-items",
 		manager.With(
 			http.HandlerFunc(
 				h.GetCartItems,
@@ -34,7 +34,7 @@ func (h *CartItemHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware
 	)
 
 	mux.Handle(
-		"PUT /carts/{id}",
+		"PUT /cart-items/{id}",
 		manager.With(
 			http.HandlerFunc(
 				h.UpdateCartItem,
@@ -43,7 +43,7 @@ func (h *CartItemHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware
 	)
 
 	mux.Handle(
-		"DELETE /carts/{id}",
+		"DELETE /cart-items/{id}",
 		manager.With(
 			http.HandlerFunc(
 				h.DeleteCartItem,

@@ -40,5 +40,4 @@ func (h *CartItemHandler) UpdateCartItem(w http.ResponseWriter, r *http.Request)
 	}
 
 	util.SendData(w, http.StatusOK, updatedCart)
-
 }
