@@ -1,4 +1,4 @@
-package cartitem
+package order
 
 import (
 	"encoding/json"
@@ -8,8 +8,8 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *CartItemHandler) CreateCartItem(w http.ResponseWriter, r *http.Request) {
-	var cartItem domain.CartItem
+func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
+	var cartItem domain.Order
 
 	err := json.NewDecoder(r.Body).Decode(&cartItem)
 	if err != nil {
@@ -17,11 +17,7 @@ func (h *CartItemHandler) CreateCartItem(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	createdCart, err := h.svc.Create(domain.CartItem{
-		CartID:    cartItem.CartID,
-		ProductID: cartItem.ProductID,
-		Quantity:  cartItem.Quantity,
-	})
+	createdCart, err := h.svc.Create(domain.Order{})
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -1,18 +1,18 @@
-package cartitem
+package order
 
 import (
 	"github.com/gowalillah/ecommerce/config"
 	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
-type CartItemHandler struct {
+type OrderHandler struct {
 	middlewares middleware.Middlewares
 	cnf         *config.Config
 	svc         Service
 }
 
-func NewCartItemHandler(middlewares *middleware.Middlewares, cnf *config.Config, svc Service) *CartItemHandler {
-	return &CartItemHandler{
+func NewOrderHandler(middlewares *middleware.Middlewares, cnf *config.Config, svc Service) *OrderHandler {
+	return &OrderHandler{
 		middlewares: *middlewares,
 		cnf:         cnf,
 		svc:         svc,

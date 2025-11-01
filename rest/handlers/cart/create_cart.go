@@ -1,7 +1,7 @@
 package cart
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gowalillah/ecommerce/domain"
@@ -11,20 +11,28 @@ import (
 func (h *CartHandler) CreateCart(w http.ResponseWriter, r *http.Request) {
 	var cart domain.Cart
 
-	usr, _ := util.GetUserFromContext(r, h.cnf)
-
-	if usr != nil {
-		cart.UserID = usr.Uuid
+	err := json.NewDecoder(r.Body).Decode(&cart)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	createdCart, err := h.svc.Create(cart)
+	usr, _ := util.GetUserFromContext(r, h.cnf)
+	if usr != nil {
+		cart.UserID = &usr.Uuid
+	} else {
+		cart.UserID = nil
+	}
 
+	createdCart, err := h.svc.Create(domain.Cart{
+		UserID:    cart.UserID,
+		ProductID: cart.ProductID,
+		Quantity:  cart.Quantity,
+	})
 	if err != nil {
-		fmt.Println("handlers:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	util.SendData(w, http.StatusOK, createdCart)
-
 }

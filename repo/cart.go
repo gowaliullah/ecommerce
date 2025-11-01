@@ -27,19 +27,22 @@ func (r *cartRepo) Create(c domain.Cart) (*domain.Cart, error) {
 	query := `
 		INSERT INTO carts (
 			unique_id,
-			user_id
-		) VALUES ($1, $2)
-		RETURNING id
+			user_id,
+			product_id,
+			quantity
+		) VALUES (
+			$1, $2, $3, $4
+		) RETURNING id
 	`
 
 	var userID interface{}
-	if c.UserID == "" {
+	if c.UserID == nil || *c.UserID == "" {
 		userID = nil
 	} else {
-		userID = c.UserID
+		userID = *c.UserID
 	}
 
-	row := r.db.QueryRow(query, c.Uuid, userID)
+	row := r.db.QueryRow(query, c.Uuid, userID, c.ProductID, c.Quantity)
 	err := row.Scan(&c.ID)
 	if err != nil {
 		return nil, err
@@ -49,7 +52,7 @@ func (r *cartRepo) Create(c domain.Cart) (*domain.Cart, error) {
 }
 
 func (r *cartRepo) List() ([]*domain.Cart, error) {
-	query := `SELECT id, unique_id, user_id FROM carts`
+	query := `SELECT id, unique_id, user_id, product_id, quantity FROM carts`
 
 	var carts []*domain.Cart
 
@@ -64,7 +67,7 @@ func (r *cartRepo) List() ([]*domain.Cart, error) {
 
 func (r *cartRepo) Get(id int) (*domain.Cart, error) {
 	query := `
-		SELECT id, unique_id, user_id FROM carts WHERE id = $1
+		SELECT id, unique_id, user_id, product_id, quantity FROM carts WHERE id = $1
  	`
 	var c domain.Cart
 
@@ -80,9 +83,11 @@ func (r *cartRepo) Update(c domain.Cart) (*domain.Cart, error) {
 	query := `
 		UPDATE carts SET
 		user_id = $1,
-	WHERE id = $2
+		product_id = $2,
+		quantity = $3
+	WHERE id = $4
 	`
-	_, err := r.db.Exec(query, c.UserID)
+	_, err := r.db.Exec(query, c.UserID, c.ProductID, c.Quantity, c.ID)
 	if err != nil {
 		return nil, err
 	}

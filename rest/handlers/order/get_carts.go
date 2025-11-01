@@ -1,4 +1,4 @@
-package cartitem
+package order
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *CartItemHandler) GetCartItems(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) GetOrders(w http.ResponseWriter, r *http.Request) {
 	carts, err := h.svc.List()
 	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, err.Error())

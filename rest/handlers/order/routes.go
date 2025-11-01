@@ -1,4 +1,4 @@
-package cartitem
+package order
 
 import (
 	"net/http"
@@ -6,47 +6,47 @@ import (
 	"github.com/gowalillah/ecommerce/rest/middleware"
 )
 
-func (h *CartItemHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
+func (h *OrderHandler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager) {
 
 	mux.Handle(
-		"GET /cart-items",
+		"GET /orders",
 		manager.With(
 			http.HandlerFunc(
-				h.CreateCartItem),
+				h.CreateOrder),
 		),
 	)
 
 	mux.Handle(
-		"GET /cart-items/{id}",
+		"GET /orders/{id}",
 		manager.With(
 			http.HandlerFunc(
-				h.GetCartItem),
+				h.GetOrder),
 		),
 	)
 
 	mux.Handle(
-		"POST /cart-items",
+		"POST /orders",
 		manager.With(
 			http.HandlerFunc(
-				h.GetCartItems,
+				h.GetOrders,
 			),
 		),
 	)
 
 	mux.Handle(
-		"PUT /cart-items/{id}",
+		"PUT /orders/{id}",
 		manager.With(
 			http.HandlerFunc(
-				h.UpdateCartItem,
+				h.UpdateOrder,
 			),
 		),
 	)
 
 	mux.Handle(
-		"DELETE /cart-items/{id}",
+		"DELETE /orders/{id}",
 		manager.With(
 			http.HandlerFunc(
-				h.DeleteCartItem,
+				h.DeleteOrder,
 			),
 		),
 	)

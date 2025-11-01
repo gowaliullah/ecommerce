@@ -1,4 +1,4 @@
-package cartitem
+package order
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *CartItemHandler) UpdateCartItem(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) UpdateOrder(w http.ResponseWriter, r *http.Request) {
 	catId := r.PathValue("id")
 	id, err := strconv.Atoi(catId)
 	if err != nil {
@@ -17,7 +17,7 @@ func (h *CartItemHandler) UpdateCartItem(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var req domain.CartItem
+	var req domain.Order
 
 	decoder := json.NewDecoder(r.Body)
 	err = decoder.Decode(&req)
@@ -26,12 +26,8 @@ func (h *CartItemHandler) UpdateCartItem(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	updatedCart, err := h.svc.Update(domain.CartItem{
-		ID:        id,
-		Uuid:      req.Uuid,
-		CartID:    req.Uuid,
-		ProductID: req.ProductID,
-		Quantity:  req.Quantity,
+	updatedCart, err := h.svc.Update(domain.Order{
+		ID: id,
 	})
 
 	if err != nil {

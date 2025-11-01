@@ -1,6 +1,10 @@
 package cart
 
-import "github.com/gowalillah/ecommerce/domain"
+import (
+	"fmt"
+
+	"github.com/gowalillah/ecommerce/domain"
+)
 
 type service struct {
 	cartRepo CartRepo
@@ -13,6 +17,7 @@ func NewService(cartRepo CartRepo) Service {
 }
 
 func (svc *service) Create(c domain.Cart) (*domain.Cart, error) {
+	fmt.Println("service")
 	return svc.cartRepo.Create(c)
 }
 

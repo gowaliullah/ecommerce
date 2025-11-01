@@ -1,4 +1,4 @@
-package cartitem
+package order
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 	"github.com/gowalillah/ecommerce/util"
 )
 
-func (h *CartItemHandler) GetCartItem(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 	cartId := r.PathValue("id")
 	id, err := strconv.Atoi(cartId)
 	if err != nil {
