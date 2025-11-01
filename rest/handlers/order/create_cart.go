@@ -9,20 +9,32 @@ import (
 )
 
 func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
-	var cartItem domain.Order
+	var req domain.Order
 
-	err := json.NewDecoder(r.Body).Decode(&cartItem)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid request payload: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	createdCart, err := h.svc.Create(domain.Order{})
+	usr, ok := util.GetUserFromContext(r, h.cnf)
+
+	if !ok {
+		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	createdOrder, err := h.svc.Create(domain.Order{
+		UserID:    usr.ID,
+		ProductID: req.ProductID,
+		Quantity:  req.Quantity,
+		Total:     req.Total,
+		Status:    req.Status,
+	})
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	util.SendData(w, http.StatusOK, createdCart)
+	util.SendData(w, http.StatusCreated, createdOrder)
 }

@@ -21,25 +21,39 @@ func NewCartItemRepo(db sqlx.DB) OrderRepo {
 	}
 }
 
-func (r *orderRepo) Create(c domain.Order) (*domain.Order, error) {
-
-	c.Uuid = uuid.New().String()
+func (r *orderRepo) Create(o domain.Order) (*domain.Order, error) {
+	o.Uuid = uuid.New().String()
 
 	query := `
-		INSERT INTO carts (
+		INSERT INTO orders (
 			unique_id,
-			user_id
+			user_id,
+			product_id,
+			status,
+			quantity,
+			total_price
 		) VALUES (
-			$1, $2
-		) RETURNING id
+			$1, $2, $3, $4, $5, $6
+		)
+		RETURNING id
 	`
-	row := r.db.QueryRow(query, c.Uuid)
-	err := row.Scan(&c.ID)
+
+	row := r.db.QueryRow(
+		query,
+		o.Uuid,
+		o.UserID,
+		o.ProductID,
+		o.Status,
+		o.Quantity,
+		o.Total,
+	)
+
+	err := row.Scan(&o.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &c, nil
+	return &o, nil
 }
 
 func (r *orderRepo) List() ([]*domain.Order, error) {
