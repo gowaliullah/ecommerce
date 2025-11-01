@@ -29,6 +29,7 @@ func (h *CartHandler) CreateCart(w http.ResponseWriter, r *http.Request) {
 		ProductID: cart.ProductID,
 		Quantity:  cart.Quantity,
 	})
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
